@@ -14,9 +14,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <body class="container">
 <div class="attendance-in-index col-md-10 col-offset-2 centered center" style="font-size:30px;">
 <p class="alert alert-success">
-    Attendance In Marked Successfully for : <span class="label label-success"><?=$employeeModel->EmployeeName;?></span>
+    Attendance Out Marked Successfully for : <span class="label label-success"><?=$employeeModel->EmployeeName;?></span>
 </p><p>
-    Time : <?=$model->Time?> (In Time)
+    Time : <?=$model->OutTime?> (In Time)
     </br>
     Date : <?=$model->Date?></br>
     Device Name : <?=$employeeModel->DeviceName?>

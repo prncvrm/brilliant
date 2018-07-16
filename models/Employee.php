@@ -53,6 +53,7 @@ class Employee extends \yii\db\ActiveRecord
             'EmployeeName' => 'Employee Name',
             'DeviceName' => 'Device Name',
             'MacAddress' => 'Mac Address',
+            'Branch'=>'Branch Name',
         ];
     }
     public static function findIdentityByMacAddress($token)

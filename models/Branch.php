@@ -41,4 +41,7 @@ class Branch extends \yii\db\ActiveRecord
             'value' => 'Value',
         ];
     }
+    public function getBranches(){
+        return $this->hasMany(Branches::className(),['id'=>'Branch']);
+    }
 }

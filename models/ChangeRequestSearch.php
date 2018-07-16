@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\AttendanceIn;
+use app\models\ChangeRequest;
 
 /**
- * AttendanceInSearch represents the model behind the search form of `app\models\AttendanceIn`.
+ * ChangeRequestSearch represents the model behind the search form of `app\models\ChangeRequest`.
  */
-class AttendanceInSearch extends AttendanceIn
+class ChangeRequestSearch extends ChangeRequest
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class AttendanceInSearch extends AttendanceIn
     public function rules()
     {
         return [
-            [['id', 'EmployeeId'], 'integer'],
-            [['Date', 'Time'], 'safe'],
+            [['id', 'RaisedById', 'RaisedEmpCode', 'Resolved'], 'integer'],
+            [['OldInTime', 'OldOutTime', 'NewInTime', 'NewOutTime'], 'safe'],
         ];
     }
 
@@ -41,27 +41,32 @@ class AttendanceInSearch extends AttendanceIn
      */
     public function search($params)
     {
-        $query = AttendanceIn::find();
+        $query = ChangeRequest::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
         $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
-            $query->where('0=1');
+            // $query->where('0=1');
             return $dataProvider;
         }
 
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'EmployeeId' => $this->EmployeeId,
-            'Date' => $this->Date,
-            'Time' => $this->Time,
+            'RaisedById' => $this->RaisedById,
+            'RaisedEmpCode' => $this->RaisedEmpCode,
+            'OldInTime' => $this->OldInTime,
+            'OldOutTime' => $this->OldOutTime,
+            'NewInTime' => $this->NewInTime,
+            'NewOutTime' => $this->NewOutTime,
+            'Resolved' => $this->Resolved,
         ]);
 
         return $dataProvider;

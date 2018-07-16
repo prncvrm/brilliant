@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use app\models\Branch;
 /* @var $this yii\web\View */
 /* @var $model app\models\Employee */
 /* @var $form yii\widgets\ActiveForm */
@@ -19,9 +19,16 @@ use yii\widgets\ActiveForm;
                 <div class="employee-form">
 
     <?php $form = ActiveForm::begin(); ?>
- <div class="row"><div class="col-md-6">
+ <div class="row"><div class="col-md-3">
     <?= $form->field($model, 'EmployeeCode')->textInput(['maxlength' => true]) ?>
-  </div><div class="col-md-6">
+  </div>
+<div class="col-md-3">
+    <?= $form->field($model, 'Branch')->dropDownList(
+        yii\helpers\ArrayHelper::map(Branch::find()->leftJoin('branchpermission','branch.id = branchpermission.Branch')->where(['=','Users',Yii::$app->User->identity->id])->all(),'id','value'),
+        ['prompt'=>'Select Branch Name']
+    )  ?>
+</div>
+  <div class="col-md-6">
     <?= $form->field($model, 'EmployeeName')->textInput(['maxlength' => true]) ?>
 </div></div>
 <div class="row"><div class="col-md-6">
@@ -29,6 +36,7 @@ use yii\widgets\ActiveForm;
 </div><div class="col-md-6">
     <?= $form->field($model, 'MacAddress')->textInput(['maxlength' => true]) ?>
 </div></div>
+
     <div class="form-group">
         <?= Html::submitButton('Register', ['class' => 'btn btn-success']) ?>
     </div>

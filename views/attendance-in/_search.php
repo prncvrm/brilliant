@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Employee;
+use app\models\Branch;
+use app\models\BranchPermission;
 use app\models\Months;
 use app\models\Years;
 use yii\helpers\ArrayHelper;
@@ -26,8 +28,13 @@ use yii\helpers\ArrayHelper;
         'method' => 'get',
     ]); ?>
 <div class="row"><div class="col-md-6">
+  <?php
+$branch_query=Branch::find()->select(['branch.id'])->leftJoin('branchpermission','branch.id = branchpermission.Branch')->where(['=','Users',Yii::$app->User->identity->id]);
+        $query = Employee::find()->where(['in','Branch',$branch_query])->all();
+          ?>
     <?= $form->field($model, 'EmployeeId')->dropDownList(
-        ArrayHelper::map(Employee::find()->all(),'id','EmployeeName'),
+        
+        ArrayHelper::map($query,'id','EmployeeName'),
         ['prompt'=>'Select Employee Name']
     ) ?>
      </div>    
@@ -39,7 +46,7 @@ use yii\helpers\ArrayHelper;
 </div>
 <div class="col-md-3">
     <?= $form->field($model, 'Year')->dropDownList(
-        ArrayHelper::map(Years::find()->all(),'id','Year'),
+        ArrayHelper::map(Years::find()->all(),'Year','Year'),
         ['prompt'=>'Select Month']
     ) ?>
 </div>

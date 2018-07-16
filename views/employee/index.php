@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -24,8 +25,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'EmployeeName',
             'DeviceName',
             'MacAddress',
+            ['attribute'=>'Branch',
+            'enableSorting' => true,
+            'value'=>function($model){
+                return app\models\Branch::findAll(['id'=>$model->Branch])[0]["value"];
 
-            ['class' => 'yii\grid\ActionColumn'],
+            },
+            ],
+
+            ['class' => 'yii\grid\ActionColumn',
+            'template'=>'{update} {delete} {view}',
+            'buttons'=>[
+                'view'=>function($url,$model){
+                    return Html::a('<span class="glyphicon glyphicon-calendar"></span>', yii\helpers\Url::to(['attendance-in/attendance-in-view', 'AttendanceInSearch[EmployeeId]'=>$model->id,'AttendanceInSearch[Month]'=>date("m"),'AttendanceInSearch[Year]'=>date("Y")]),['title'=>Yii::t('app','Attendance')]);
+                }
+            ],
+
+            ],
         ],
     ]); ?>
 </div>

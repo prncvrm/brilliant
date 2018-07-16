@@ -44,4 +44,5 @@ class BranchPermission extends \yii\db\ActiveRecord
             'Branch' => 'Branch',
         ];
     }
+
 }

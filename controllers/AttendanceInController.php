@@ -9,10 +9,21 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Employee;
-
+use app\models\Months;
+use app\models\Years;
+use yii\db\Query;
+use app\models\Branch;
 /**
  * AttendanceInController implements the CRUD actions for AttendanceIn model.
  */
+    function add_zero($num){
+        if((int)$num<10){
+          return "0".(String)$num;
+        }
+        else
+            return $num;
+    }
+
   function get_client_ip() {
         $ipaddress = '';
         if (getenv('HTTP_CLIENT_IP'))
@@ -90,10 +101,11 @@ class AttendanceInController extends Controller
                     return;
                 }
             }
-            return $this->renderPartial('attendance-in-success', [
+            return AttendanceInController::actionOut();
+            /*return $this->renderPartial('attendance-in-success', [
                     'employeeModel'=>$employeeModel,
                     'model'=>$model,
-                ]);
+                ]);*/
         }
        else{
             print_r("<h1><p style='color:red;background-color:pink;border-color:#c3e6cb;'>No Such Device/Employee Registered</p></h1>");
@@ -101,6 +113,38 @@ class AttendanceInController extends Controller
         }
        
     }
+
+    public function actionOut()
+    {   
+        $mac=get_client_mac(get_client_ip());
+        $employeeModel=Employee::findIdentityByMacAddress($mac);
+        if($employeeModel!=null){
+            $model = new AttendanceIn();
+            date_default_timezone_set('Asia/Calcutta');
+            $model=AttendanceIn::findIdentityByUniqueKeys($employeeModel->id,date("Y-m-d"));
+            if($model==null){
+                print_r("<h1><p style='color:red;background-color:pink;border-color:#c3e6cb;'>No In Attendance Marked For the Day. Please Ask Admin, to update it if you have missed it.</p></h1>");
+                return;
+            }
+            $model->OutTime=date("H:i:s");
+            if($model->validate() && $model->save()){
+            return $this->renderPartial('attendance-out-success', [
+                    'employeeModel'=>$employeeModel,
+                    'model'=>$model,
+                ]);
+            }
+            else{
+                print_r("Error Occured");
+                    return;
+            }
+        }
+       else{
+            print_r("<h1><p style='color:red;background-color:pink;border-color:#c3e6cb;'>No Such Device/Employee Registered</p></h1>");
+            return;
+        }
+       
+    }
+
 
     /**
      * Displays a single AttendanceIn model.
@@ -110,12 +154,22 @@ class AttendanceInController extends Controller
      */
     public function actionAttendanceInView()
     {
+        $no_days=new Query;
+        $no_days->select('Days')->from('Months')->where(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["Month"]]);
+        $_no_days = $no_days->all();
+        $start=Yii::$app->request->queryParams['AttendanceInSearch']["Year"]."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-"."01";
+        $end=Yii::$app->request->queryParams['AttendanceInSearch']["Year"]."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-"."31";
+        
+        $present_days=AttendanceIn::find()->where(['EmployeeId'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->andWhere(['and','Date>='.'"'.$start.'"','Date<='.'"'.$end.'"'])->all();
+        $pst_days=[];
+        foreach ($present_days as $pd) {
+            $pst_days[$pd["Date"]]=['InTime'=>$pd["Time"],'OutTime'=>$pd["OutTime"]];
+        }
         $searchModel = new AttendanceInSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-       
         return $this->render('attendance-in-view', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'no_days'=>(int)$_no_days[0]["Days"],
+            'present_days'=>$pst_days,
         ]);
     }
 

@@ -41,8 +41,8 @@ class EmployeeSearch extends Employee
      */
     public function search($params)
     {
-        $query = Employee::find();
-
+        $branch_query=Branch::find()->select(['branch.id'])->leftJoin('branchpermission','branch.id = branchpermission.Branch')->where(['=','Users',Yii::$app->User->identity->id]);
+        $query = Employee::find()->where(['in','Branch',$branch_query]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
