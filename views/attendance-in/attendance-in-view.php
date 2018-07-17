@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     </td>
     <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ ?>
-        <button class="request" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["Month"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>">Request</button>
+        <button class="request" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>">Request</button>
       <?php }?>
     </td>
   </tr>
