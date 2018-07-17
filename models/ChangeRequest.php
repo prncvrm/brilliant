@@ -32,7 +32,7 @@ class ChangeRequest extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['RaisedById', 'RaisedEmpCode', 'OldInTime', 'OldOutTime', 'NewInTime', 'NewOutTime'], 'required'],
+            [['RaisedById', 'RaisedEmpCode', 'OldInTime', 'OldOutTime', 'Date','NewInTime', 'NewOutTime'], 'required'],
             [['RaisedById', 'RaisedEmpCode', 'Resolved'], 'integer'],
             [['OldInTime', 'OldOutTime', 'NewInTime', 'NewOutTime'], 'safe'],
         ];

@@ -17,7 +17,7 @@ class EmployeeCategory extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%EmployeeCategory}}';
+        return '{{%employeecategory}}';
     }
 
     /**

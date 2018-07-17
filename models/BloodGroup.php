@@ -17,7 +17,7 @@ class BloodGroup extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%BloodGroup}}';
+        return '{{%bloodgroup}}';
     }
 
     /**

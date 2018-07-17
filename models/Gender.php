@@ -17,7 +17,7 @@ class Gender extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%Gender}}';
+        return '{{%gender}}';
     }
 
     /**

@@ -17,7 +17,7 @@ class ParentDepartment extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%ParentDepartment}}';
+        return '{{%parentdepartment}}';
     }
 
     /**

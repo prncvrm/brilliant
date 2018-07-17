@@ -17,7 +17,7 @@ class Department extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%Department}}';
+        return '{{%department}}';
     }
 
     /**

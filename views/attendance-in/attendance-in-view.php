@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
     <table class="table table-striped">
   <tr>
     <th>Date</th>
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
     $date=Yii::$app->request->queryParams['AttendanceInSearch']["Year"]."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-".add_zero($i);
     if(array_key_exists($date,$present_days))
         echo "&#10004;";
-    ?></td> 
+    ?></td>
     <td style="color:green;font-size: 18px">
     <?php
    if(isset($present_days[$date]))
@@ -70,14 +70,15 @@ $this->params['breadcrumbs'][] = $this->title;
        echo (time_diff($present_days[$date]["OutTime"],$present_days[$date]["InTime"]));
     ?>
     </td>
-    <td>
-        <button data-toggle="modal" data-target="#myModal">Request</button>
+    <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ ?>
+        <button class="request" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["Month"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>" data-toggle="modal" data-target="#myModal">Request</button>
+      <?php }?>
     </td>
   </tr>
 <?php }?>
 </table>
 </div>
-<div class="col-md-6" style="font-size:18px;">
+<div class="col-md-4" style="font-size:18px;">
     <p><b>Number of Working Hours :</b> <?php global $total_minutes;
 echo($total_minutes/60);
         ?> Hours</p>
@@ -94,31 +95,7 @@ echo($total_minutes/60);
         <h4 class="modal-title" id="myModalLabel">Make Change Request</h4>
       </div>
       <div class="modal-body">
-        <div class="change-request-form">
 
-    <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'RaisedById')->textInput() ?>
-
-    <?= $form->field($model, 'RaisedEmpCode')->textInput() ?>
-
-    <?= $form->field($model, 'OldInTime')->textInput() ?>
-
-    <?= $form->field($model, 'OldOutTime')->textInput() ?>
-
-    <?= $form->field($model, 'NewInTime')->textInput() ?>
-
-    <?= $form->field($model, 'NewOutTime')->textInput() ?>
-
-    <?= $form->field($model, 'Resolved')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
-</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -131,9 +108,26 @@ echo($total_minutes/60);
     $("document").on('ready pjax:success',function(){
         $(".request").click(function(e){
             e.preventDefault();
-
+            $('$modal').modal('show').find('.modal-content').load($(this).attr('href'));
         }); 
     });
+    $('#w0').on('beforeSubmit', function(e) {
+    var form = $(this);
+    var formData = form.serialize();
+    $.ajax({
+        url: form.attr("action"),
+        type: form.attr("method"),
+        data: formData,
+        success: function (data) {
+            alert('Test');
+        },
+        error: function () {
+            alert("Something went wrong");
+        }
+    });
+}).on('submit', function(e){
+    e.preventDefault();
+});
 </script>
 
 

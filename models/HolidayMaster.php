@@ -20,7 +20,7 @@ class HolidayMaster extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%HolidayMaster}}';
+        return '{{%holidaymaster}}';
     }
 
     /**

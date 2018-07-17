@@ -17,7 +17,7 @@ class MaritalStatus extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%MaritalStatus}}';
+        return '{{%maritalstatus}}';
     }
 
     /**

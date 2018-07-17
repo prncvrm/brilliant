@@ -18,7 +18,7 @@ class BranchPermission extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%BranchPermission}}';
+        return '{{%branchpermission}}';
     }
 
     /**

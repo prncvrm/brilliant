@@ -62,17 +62,23 @@ class ChangeRequestController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($EmpCode, $InTime,$OutTime,$Date)
     {
-        $model = new ChangeRequest();
+        if (Yii::$app->request->isAjax) {
+            $model = new ChangeRequest();
+            $model->RaisedById=Yii::$app->User->identity->id;
+            $model->RaisedEmpCode=$EmpCode;
+            $model->OldInTime=$InTime;
+            $model->OldOutTime=$OutTime;
+            $model->Date=$Date;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->renderAjax(['view', 'id' => $model->id]);
+            }
+            return $this->renderAjax('create', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**

@@ -18,7 +18,7 @@ class RoleAssignment extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%RoleAssignment}}';
+        return '{{%roleassignment}}';
     }
 
     /**

@@ -155,7 +155,7 @@ class AttendanceInController extends Controller
     public function actionAttendanceInView()
     {
         $no_days=new Query;
-        $no_days->select('Days')->from('Months')->where(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["Month"]]);
+        $no_days->select('Days')->from('months')->where(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["Month"]]);
         $_no_days = $no_days->all();
         $start=Yii::$app->request->queryParams['AttendanceInSearch']["Year"]."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-"."01";
         $end=Yii::$app->request->queryParams['AttendanceInSearch']["Year"]."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-"."31";

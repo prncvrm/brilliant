@@ -17,7 +17,7 @@ class HolidayType extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%HolidayType}}';
+        return '{{%holidaytype}}';
     }
 
     /**

@@ -17,7 +17,7 @@ class LeaveCategory extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%LeaveCategory}}';
+        return '{{%leavecategory}}';
     }
 
     /**

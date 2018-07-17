@@ -17,7 +17,7 @@ class Process extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%Process}}';
+        return '{{%process}}';
     }
 
     /**

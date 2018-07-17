@@ -17,7 +17,7 @@ class Level extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%Level}}';
+        return '{{%level}}';
     }
 
     /**

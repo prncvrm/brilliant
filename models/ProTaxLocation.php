@@ -17,7 +17,7 @@ class ProTaxLocation extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%ProTaxLocation}}';
+        return '{{%protaxlocation}}';
     }
 
     /**

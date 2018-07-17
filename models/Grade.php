@@ -17,7 +17,7 @@ class Grade extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%Grade}}';
+        return '{{%grade}}';
     }
 
     /**
