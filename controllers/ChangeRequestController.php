@@ -73,11 +73,14 @@ class ChangeRequestController extends Controller
             $model->Date=$Date;
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->renderAjax(['view', 'id' => $model->id]);
+                return print_r("['success']");
             }
             return $this->renderAjax('create', [
                 'model' => $model,
             ]);
+        }
+        else{
+            print_r("Not Ajax Request");
         }
     }
 

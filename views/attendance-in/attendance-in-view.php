@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     </td>
     <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ ?>
-        <button class="request" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["Month"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>" data-toggle="modal" data-target="#myModal">Request</button>
+        <button class="request" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["Month"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>">Request</button>
       <?php }?>
     </td>
   </tr>
@@ -87,7 +87,7 @@ echo($total_minutes/60);
 </div>
 </div>
 
-<div class="modal modal-info fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -97,38 +97,18 @@ echo($total_minutes/60);
       <div class="modal-body">
 
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Request Change</button>
-      </div>
+      
     </div>
   </div>
 </div>
-<script type="text/javascript">
-    $("document").on('ready pjax:success',function(){
-        $(".request").click(function(e){
-            e.preventDefault();
-            $('$modal').modal('show').find('.modal-content').load($(this).attr('href'));
-        }); 
-    });
-    $('#w0').on('beforeSubmit', function(e) {
-    var form = $(this);
-    var formData = form.serialize();
-    $.ajax({
-        url: form.attr("action"),
-        type: form.attr("method"),
-        data: formData,
-        success: function (data) {
-            alert('Test');
-        },
-        error: function () {
-            alert("Something went wrong");
-        }
-    });
-}).on('submit', function(e){
+<?php
+$js=<<< JS
+$(".request").click(function(e){
     e.preventDefault();
+    $('#myModal').modal('show').find('.modal-body').load($(this).attr('href'));
 });
-</script>
+JS;
 
-
+$this->registerJs($js);
+?>
 </div>
