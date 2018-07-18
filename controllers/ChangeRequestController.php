@@ -8,6 +8,7 @@ use app\models\ChangeRequestSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\AttendanceIn;
 
 /**
  * ChangeRequestController implements the CRUD actions for ChangeRequest model.
@@ -65,12 +66,17 @@ class ChangeRequestController extends Controller
     public function actionCreate($EmpCode, $InTime,$OutTime,$Date)
     {
         if (Yii::$app->request->isAjax) {
-            $model = new ChangeRequest();
-            $model->RaisedById=Yii::$app->User->identity->id;
-            $model->RaisedEmpCode=$EmpCode;
-            $model->OldInTime=$InTime;
-            $model->OldOutTime=$OutTime;
-            $model->Date=$Date;
+            $model=$this->_findModel($EmpCode,$Date);
+            if($model==null){
+                $model=new ChangeRequest;
+                $model->RaisedById=Yii::$app->User->identity->id;
+                $model->RaisedEmpCode=$EmpCode;
+                $model->OldInTime=$InTime;
+                $model->OldOutTime=$OutTime;
+                $model->Date=$Date;
+                $model->Resolved=0;    
+            }
+
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return print_r("['success']");
@@ -113,16 +119,25 @@ class ChangeRequestController extends Controller
      */
      public function actionApprove($id)
     {
-        //$this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $_model=$this->findModel($id);
+        $model=AttendanceIn::findIdentityByUniqueKeys($_model->RaisedEmpCode,$_model->Date);
+        $model->Time=$_model->NewInTime;
+        $model->OutTime=$_model->NewOutTime;
+        $_model->Resolved=1;
+        if($model->save()&&$_model->save())
+            return $this->redirect(['index']); 
+        //print_r($model);
+        throw new NotFoundHttpException('Some Issue, Fixing it.');
     }
 
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $_model=$this->findModel($id);
+        $_model->Resolved=1;
+        $_model->Reason=$_model->Reason."(Rejected)";
+        if($_model->save())    
+            return $this->redirect(['index']);
+        throw new NotFoundHttpException('Some Issue, Fixing it.');
     }
 
     /**
@@ -132,6 +147,12 @@ class ChangeRequestController extends Controller
      * @return ChangeRequest the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    protected function _findModel($EmpId, $Date){
+        if(($model=ChangeRequest::findOne(['RaisedEmpCode'=>$EmpId,'Date'=>$Date])) !==null){
+            return $model;
+        }
+
+    }
     protected function findModel($id)
     {
         if (($model = ChangeRequest::findOne($id)) !== null) {

@@ -18,24 +18,50 @@ use app\models\Employee;
     </div>
     <div class="row">
         <div class="col-md-3">
-
-    <?= $form->field($model, 'OldInTime')->textInput() ?>
+        <?php if(!$model->Resolved){?>
+    <?= $form->field($model, 'OldInTime')->textInput( ) ?>
         </div>
         <div class="col-md-3">
-    <?= $form->field($model, 'OldOutTime')->textInput() ?>
+    <?= $form->field($model, 'OldOutTime')->textInput( ) ?>
         </div>
         <div class="col-md-3">
-    <?= $form->field($model, 'NewInTime')->textInput() ?>
+    <?= $form->field($model, 'NewInTime')->textInput( ) ?>
         </div>
         <div class="col-md-3">
-    <?= $form->field($model, 'NewOutTime')->textInput() ?>
+    <?= $form->field($model, 'NewOutTime')->textInput( ) ?>
         </div>
-    </div>
+        </div>
     
 <div class="row">
         <div class="col-md-12">
-    <?= $form->field($model, 'Reason')->textInput() ?>
+    <?= $form->field($model, 'Reason')->textInput( ) ?>
 </div>
+    <?php }
+
+    else{
+        ?>
+   <?= $form->field($model, 'OldInTime')->textInput( ['disabled'=>'true']) ?>
+        </div>
+        <div class="col-md-3">
+    <?= $form->field($model, 'OldOutTime')->textInput( ['disabled'=>'true']) ?>
+        </div>
+        <div class="col-md-3">
+    <?= $form->field($model, 'NewInTime')->textInput(['disabled'=>'true'] ) ?>
+        </div>
+        <div class="col-md-3">
+    <?= $form->field($model, 'NewOutTime')->textInput(['disabled'=>'true'] ) ?>
+        </div>
+</div>
+    
+<div class="row">
+        <div class="col-md-12">
+    <?= $form->field($model, 'Reason')->textInput(['disabled'=>'true'] ) ?>
+</div>
+
+    <?php
+    }
+    ?>
+    
 </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
