@@ -34,7 +34,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             ['class' => 'yii\grid\ActionColumn',
-            'template'=>'{update} {delete} {view}',
+            'visible'=>Yii::$app->user->identity->UserType<=app\models\Users::ROLE_ADMIN,
+            'template'=>'{update}{view}',
+            'buttons'=>[
+                'view'=>function($url,$model){
+                    return Html::a('<span class="glyphicon glyphicon-calendar"></span>', yii\helpers\Url::to(['attendance-in/attendance-in-view', 'AttendanceInSearch[EmployeeId]'=>$model->id,'AttendanceInSearch[Month]'=>date("m"),'AttendanceInSearch[Year]'=>date("Y")]),['title'=>Yii::t('app','Attendance')]);
+                }
+            ],
+
+            ],
+            ['class' => 'yii\grid\ActionColumn',
+            'visible'=>Yii::$app->user->identity->UserType==app\models\Users::ROLE_MODERATOR,
+            'template'=>'{view}',
             'buttons'=>[
                 'view'=>function($url,$model){
                     return Html::a('<span class="glyphicon glyphicon-calendar"></span>', yii\helpers\Url::to(['attendance-in/attendance-in-view', 'AttendanceInSearch[EmployeeId]'=>$model->id,'AttendanceInSearch[Month]'=>date("m"),'AttendanceInSearch[Year]'=>date("Y")]),['title'=>Yii::t('app','Attendance')]);

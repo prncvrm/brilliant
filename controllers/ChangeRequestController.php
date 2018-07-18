@@ -44,6 +44,17 @@ class ChangeRequestController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionReverseIndex()
+    {
+        $searchModel = new ChangeRequestSearch();
+        $dataProvider = $searchModel->search("[[ChangeRequestSearch] => [[Resolved] => 1 ]]");
+
+        return $this->render('reverse', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
 
     /**
      * Displays a single ChangeRequest model.
@@ -117,7 +128,7 @@ class ChangeRequestController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-     public function actionApprove($id)
+    public function actionApprove($id)
     {
         $_model=$this->findModel($id);
         $model=AttendanceIn::findIdentityByUniqueKeys($_model->RaisedEmpCode,$_model->Date);
@@ -126,6 +137,16 @@ class ChangeRequestController extends Controller
         $_model->Resolved=1;
         if($model->save()&&$_model->save())
             return $this->redirect(['index']); 
+        //print_r($model);
+        throw new NotFoundHttpException('Some Issue, Fixing it.');
+    }
+
+    public function actionReverse($id)
+    {
+        $_model=$this->findModel($id);
+        $_model->Resolved=0;
+        if($_model->save())
+            return $this->redirect(['reverse-index']); 
         //print_r($model);
         throw new NotFoundHttpException('Some Issue, Fixing it.');
     }

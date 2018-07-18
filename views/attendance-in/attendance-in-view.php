@@ -70,9 +70,27 @@ $this->params['breadcrumbs'][] = $this->title;
        echo (time_diff($present_days[$date]["OutTime"],$present_days[$date]["InTime"]));
     ?>
     </td>
-    <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ ?>
-        <button class="request" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>">Request</button>
-      <?php }?>
+    <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ 
+        if(isset($present_days[$date]['Resolved'])){
+          if($present_days[$date]['Resolved']==0){
+            ?>
+            <button class="request btn btn-warning" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>">Req Sent</button>
+            <?php
+            }
+            else{
+            ?>
+            <button class="request btn btn-success" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>">Req Complete</button>
+            <?php
+          }
+          }
+          else
+          {
+          ?>
+<button class="request btn btn-primary" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>">Make Req</button>
+          <?php
+          }
+        }
+      ?>
     </td>
   </tr>
 <?php }?>
@@ -95,7 +113,7 @@ echo($total_minutes/60);
         <h4 class="modal-title" id="myModalLabel">Make Change Request</h4>
       </div>
       <div class="modal-body">
-
+        Please Wait... Loading...
       </div>
       
     </div>

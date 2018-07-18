@@ -13,6 +13,7 @@ use app\models\Months;
 use app\models\Years;
 use yii\db\Query;
 use app\models\Branch;
+use app\models\ChangeRequest;
 /**
  * AttendanceInController implements the CRUD actions for AttendanceIn model.
  */
@@ -163,7 +164,8 @@ class AttendanceInController extends Controller
         $present_days=AttendanceIn::find()->where(['EmployeeId'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->andWhere(['and','Date>='.'"'.$start.'"','Date<='.'"'.$end.'"'])->all();
         $pst_days=[];
         foreach ($present_days as $pd) {
-            $pst_days[$pd["Date"]]=['InTime'=>$pd["Time"],'OutTime'=>$pd["OutTime"]];
+            $pst_days[$pd["Date"]]=['InTime'=>$pd["Time"],'OutTime'=>$pd["OutTime"],"Resolved"=>(ChangeRequest::findOne(['RaisedEmpCode'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"],'Date'=>$pd["Date"]])["Resolved"])];
+            
         }
         $searchModel = new AttendanceInSearch();
         return $this->render('attendance-in-view', [

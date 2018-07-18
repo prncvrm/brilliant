@@ -21,16 +21,18 @@ class PluginsAsset extends AssetBundle
     public $sourcePath = '@vendor/almasaeed2010/adminlte/plugins';
     public $js = [
         'datepicker/js/bootstrap-datepicker.js',
-        'timepicker/bootstrap-timepicker.min.js',
+        'timepicker2/bootstrap-timepicker.js',
         'datatable/datatables.min.js',
+        'bootstrap-slider/bootstrap-slider.js',
 
         // more plugin Js here
     ];
     public $css = [
         'datepicker/css/bootstrap-datepicker.css',
-        'timepicker/bootstrap-timepicker.min.css',
+        'timepicker2/bootstrap-timepicker.css',
         'datatable/datatables.min.css',
         'Ionicons/css/ionicons.min.css',
+        'bootstrap-slider/slider.css',
         // more plugin CSS here
     ];
     public $depends = [

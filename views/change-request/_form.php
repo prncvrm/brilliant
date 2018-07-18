@@ -25,10 +25,10 @@ use app\models\Employee;
     <?= $form->field($model, 'OldOutTime')->textInput( ) ?>
         </div>
         <div class="col-md-3">
-    <?= $form->field($model, 'NewInTime')->textInput( ) ?>
+    <?= $form->field($model, 'NewInTime')->textInput(['class'=>'form-control _time']) ?>
         </div>
         <div class="col-md-3">
-    <?= $form->field($model, 'NewOutTime')->textInput( ) ?>
+    <?= $form->field($model, 'NewOutTime')->textInput(['class'=>'form-control _time']) ?>
         </div>
         </div>
     
@@ -46,10 +46,10 @@ use app\models\Employee;
     <?= $form->field($model, 'OldOutTime')->textInput( ['disabled'=>'true']) ?>
         </div>
         <div class="col-md-3">
-    <?= $form->field($model, 'NewInTime')->textInput(['disabled'=>'true'] ) ?>
+    <?= $form->field($model, 'NewInTime')->textInput(['disabled'=>'true','class'=>'form-control _time'] ) ?>
         </div>
         <div class="col-md-3">
-    <?= $form->field($model, 'NewOutTime')->textInput(['disabled'=>'true'] ) ?>
+    <?= $form->field($model, 'NewOutTime')->textInput(['disabled'=>'true','class'=>'form-control _time'] ) ?>
         </div>
 </div>
     
@@ -91,8 +91,14 @@ $js=<<< JS
 }).on('submit',function(e){
       e.preventDefault();
       });
+$(document).ready(function(){
+    $('input._time').timepicker({ timeFormat: 'h:mm:ss p' });
+});
 JS;
 
 $this->registerJs($js);
 ?>
 </div>
+<script type="text/javascript">
+    
+</script>

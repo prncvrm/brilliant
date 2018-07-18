@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+   <!--  <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'RaisedById') ?>
 
@@ -27,12 +27,12 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'OldInTime') ?>
 
     <?= $form->field($model, 'OldOutTime') ?>
-
+ -->
     <?php // echo $form->field($model, 'NewInTime') ?>
 
     <?php // echo $form->field($model, 'NewOutTime') ?>
 
-    <?php // echo $form->field($model, 'Resolved') ?>
+    <?php  echo $form->field($model, 'Resolved') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

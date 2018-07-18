@@ -7,12 +7,12 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\ChangeRequestSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Change Requests';
+$this->title = 'Unlock Requests';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="change-request-index">
 
-   <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+   <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
    
     <?= GridView::widget([
@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
              ['class' => 'yii\grid\ActionColumn',
-            'template'=>'{approve} {delete}',
+            'template'=>'{approve} {delete} {reverse}',
             'buttons'=>[
                 'approve'=>function($url,$model){
                     return $model->Resolved == 0? Html::a('<span class="glyphicon glyphicon-ok"></span>', yii\helpers\Url::to(['change-request/approve', 'id'=>$model->id]),['title'=>Yii::t('app','Approve'),'data-confirm'=>'Are you sure you want to Approve this?','data-method'=>'POST','data-pjax'=>"0"]):"";
@@ -56,7 +56,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'delete'=>function($url,$model){
                     return $model->Resolved == 0?Html::a('<span class="glyphicon glyphicon-remove"></span>', yii\helpers\Url::to(['change-request/delete', 'id'=>$model->id]),['title'=>Yii::t('app','Approve'),'data-confirm'=>'Are you sure you want to Reject this?','data-method'=>'POST','data-pjax'=>"0"]):"";
                 },
-                
+                'reverse'=>function($url,$model){
+                    return Html::a('<span class="glyphicon glyphicon-repeat"></span>', yii\helpers\Url::to(['change-request/reverse', 'id'=>$model->id]),['title'=>Yii::t('app','Unlock/Reverse'),'data-confirm'=>'Are you sure you want to unlock/reverse this?','data-method'=>'POST','data-pjax'=>"0"]);
+                },
             ],
 
             ],

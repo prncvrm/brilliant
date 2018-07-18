@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\ChangeRequest;
+use app\models\AttendanceCriteria;
 
 /**
- * ChangeRequestSearch represents the model behind the search form of `app\models\ChangeRequest`.
+ * AttendanceCriteriaSearch represents the model behind the search form of `app\models\AttendanceCriteria`.
  */
-class ChangeRequestSearch extends ChangeRequest
+class AttendanceCriteriaSearch extends AttendanceCriteria
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class ChangeRequestSearch extends ChangeRequest
     public function rules()
     {
         return [
-            [['id', 'RaisedById', 'RaisedEmpCode', 'Resolved'], 'integer'],
-            [['OldInTime', 'OldOutTime', 'NewInTime', 'NewOutTime'], 'safe'],
+            [['id'], 'integer'],
+            [['MinHoursCount', 'MaxHoursCount', 'Type'], 'safe'],
         ];
     }
 
@@ -40,11 +40,8 @@ class ChangeRequestSearch extends ChangeRequest
      * @return ActiveDataProvider
      */
     public function search($params)
-    {   
-        $branch_query=Branch::find()->select(['branch.id'])->leftJoin('branchpermission','branch.id = branchpermission.Branch')->where(['=','Users',Yii::$app->User->identity->id]);
-        $emp_query = Employee::find()->select(['id'])->where(['in','Branch',$branch_query]);
-        $query = ChangeRequest::find()->where(['in','RaisedEmpCode',$emp_query]);
-
+    {
+        $query = AttendanceCriteria::find();
 
         // add conditions that should always apply here
 
@@ -63,14 +60,11 @@ class ChangeRequestSearch extends ChangeRequest
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'RaisedById' => $this->RaisedById,
-            'RaisedEmpCode' => $this->RaisedEmpCode,
-            'OldInTime' => $this->OldInTime,
-            'OldOutTime' => $this->OldOutTime,
-            'NewInTime' => $this->NewInTime,
-            'NewOutTime' => $this->NewOutTime,
-            'Resolved' => $this->Resolved,
+            'MinHoursCount' => $this->MinHoursCount,
+            'MaxHoursCount' => $this->MaxHoursCount,
         ]);
+
+        $query->andFilterWhere(['like', 'Type', $this->Type]);
 
         return $dataProvider;
     }
