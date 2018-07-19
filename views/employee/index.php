@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
             ['class' => 'yii\grid\ActionColumn',
-            'visible'=>Yii::$app->user->identity->UserType==app\models\Users::ROLE_MODERATOR,
+            'visible'=>Yii::$app->user->identity->UserType>=app\models\Users::ROLE_MODERATOR,
             'template'=>'{view}',
             'buttons'=>[
                 'view'=>function($url,$model){
