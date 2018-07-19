@@ -28,8 +28,17 @@ $this->params['breadcrumbs'][] = $this->title;
         $timeIn=preg_split("/[:,]+/", $timeIn);
         $timeOut=preg_split("/[:,]+/", $timeOut);
         $total_minutes=$total_minutes+(60*($timeOut[0]-$timeIn[0]))+abs($timeOut[1]-$timeIn[1]);
-        return (String)($timeOut[0]-$timeIn[0]).":".(String)abs($timeOut[1]-$timeIn[1]).":".(String)abs($timeOut[2]-$timeIn[2]);
+        return (String)add_zero($timeOut[0]-$timeIn[0]).":".(String)add_zero(abs($timeOut[1]-$timeIn[1])).":".(String)add_zero(abs($timeOut[2]-$timeIn[2]));
     }
+    function atten_value($attendance_criteria,$working_hours){
+      foreach($attendance_criteria as $name=>$val){
+    //    print_r($working_hours."\n".$val['min']);
+        if(strcmp($working_hours,$val['min'])>=0 && strcmp($working_hours,$val['max'])<=0)
+          return $name;
+      }
+      return "Unknown";
+    }
+    
     ?>
     <div class="row">
         <div class="col-md-8">
@@ -39,7 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <th>Present/Absent</th> 
     <th>In Time</th>
     <th>Out Time</th>
-    <th>Working Hours</th>
+    <?php
+    if(Yii::$app->user->identity->UserType<=app\models\Users::ROLE_ADMIN){
+      echo("<th>Hours</th>");
+    }
+    ?>
+    <th>Attendance</th>
     <th>Change/Request</th>
   </tr>
   <?php for($i=1;$i<=$no_days;++$i){?>
@@ -63,11 +77,25 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>  
 
     </td>
-    <td style="color:green;font-size: 18px">
+    <?php
+    if(Yii::$app->user->identity->UserType<=app\models\Users::ROLE_ADMIN){
+      ?>
+    <td style="color:blue;font-size: 18px">
          <?php
    if(isset($present_days[$date]))
     if(isset($present_days[$date]["OutTime"]))
        echo (time_diff($present_days[$date]["OutTime"],$present_days[$date]["InTime"]));
+    ?>
+    </td>
+    <?php
+    }
+    ?>
+    <td style="color:green;font-size: 18px">
+         <?php
+   if(isset($present_days[$date]))
+    if(isset($present_days[$date]["OutTime"])){
+      echo atten_value($attendance_criteria,time_diff($present_days[$date]["OutTime"],$present_days[$date]["InTime"]));
+      }
     ?>
     </td>
     <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ 
