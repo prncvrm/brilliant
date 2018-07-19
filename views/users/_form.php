@@ -15,16 +15,6 @@ use app\models\UserType;
             <ul class="nav nav-tabs">
               <li class="active"><a href="#generalInformation" data-toggle="tab">New User</a></li>
               
-              <!-- 
-            <li><a href="#employeeDetails" data-toggle="tab">Employee Details</a></li>
-              <li><a href="#personalDetails" data-toggle="tab">Personal Details</a></li>
-              <li><a href="#eduationalDetails" data-toggle="tab">Educational Details</a></li>
-              <li><a href="#emergencyContactDetails" data-toggle="tab">Emergency Contact Details</a></li>
-              <li><a href="#employeeLanguageDetails" data-toggle="tab">Employee Language Details</a></li>
-              <li><a href="#employeeFamilyDetails" data-toggle="tab">Employee Family Details</a></li>
-              <li><a href="#employeeNomineeDetails" data-toggle="tab">Employee Nominee Details</a></li>
-
-              -->
             </ul>
             <div class="tab-content">
               <div class="active tab-pane" id="activity">

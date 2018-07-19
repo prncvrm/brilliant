@@ -96,8 +96,10 @@
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
+                            
                             ['label' => 'Employee Attendance', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
                             ['label' => 'Change Request', 'icon' => 'circle-o', 'url' => ['/change-request/reverse-index'],],
+                            ['label' => 'Employee Criteria', 'icon' => 'circle-o', 'url' => ['/attendance-criteria/index'],],
                             
                         ],
                     ],
