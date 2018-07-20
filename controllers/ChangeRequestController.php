@@ -28,7 +28,7 @@ class ChangeRequestController extends Controller
                 'ruleConfig'=>[
                     'class'=>\app\components\AccessRule::className(),
                 ],
-                'only' => ['reverse'],
+                'only' => ['index'],
                 'rules' => [
                     [
                         'actions' => ['index','create', 'update', 'delete','branch-details'],
