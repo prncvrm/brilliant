@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\ChangeRequest;
 
+
 /**
  * ChangeRequestSearch represents the model behind the search form of `app\models\ChangeRequest`.
  */
@@ -42,7 +43,8 @@ class ChangeRequestSearch extends ChangeRequest
     public function search($params)
     {   
         $branch_query=Branch::find()->select(['branch.id'])->leftJoin('branchpermission','branch.id = branchpermission.Branch')->where(['=','Users',Yii::$app->User->identity->id]);
-        $emp_query = Employee::find()->select(['id'])->where(['in','Branch',$branch_query]);
+        $permission_query=UserType::find()->select(['usertype.id'])->leftJoin('roleassignment','usertype.id = roleassignment.UserType')->where(['=','Users',Yii::$app->User->identity->id]);
+        $emp_query = Employee::find()->select(['id'])->where(['in','Branch',$branch_query])->andFilterWhere(['in','Designation',$permission_query]);
         $query = ChangeRequest::find()->where(['in','RaisedEmpCode',$emp_query]);
 
 

@@ -2,16 +2,17 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\UserType;
 use app\models\Users;
-use app\models\Branch;
+
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\BranchPermissionSearch */
+/* @var $searchModel app\models\UserTypePermissionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Branch Permissions';
+$this->title = 'User Type Permissions';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="branch-permission-index">
+<div class="user-type-permission-index">
 
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     
@@ -26,18 +27,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 return ;
             }
             ],*/
-            /*only god and me knew back then while coding this part, now, no one does */
+            
             ['attribute'=>'UserType',
-            'label'=>'Branches',
-             //'contentOptions' => ['class'=>'badge badge-success'],
+            'label'=>'User Type',
+             'contentOptions' => ['class'=>'badge badge-success'],
              'value'=>function($model) use($_model){
-                //print_r($_model);
-                $UserType=\yii\helpers\ArrayHelper::map(Branch::find()->all(),'id','value');
-                $rtn =""; 
-                if(array_key_exists($model->id,(\yii\helpers\ArrayHelper::map($_model->branches, 'id', 'Branch','Users')))){
-                    foreach((\yii\helpers\ArrayHelper::map($_model->branches, 'id', 'Branch','Users')[$model->id]) as $ty)
-                        $rtn=$rtn.", ||".$UserType[$ty]." ||"; 
-                 //$rtn = $rtn.",".Html::tag('span', $UserType[$ty], ['class'=>'badge badge-success']);
+                $UserType=\yii\helpers\ArrayHelper::map(UserType::find()->all(),'id','value');
+                $rtn =" "; 
+                if(array_key_exists($model->id,(\yii\helpers\ArrayHelper::map($_model->usertype, 'id', 'UserType','Users')))){
+                    foreach((\yii\helpers\ArrayHelper::map($_model->usertype, 'id', 'UserType','Users')[$model->id]) as $ty)
+                        $rtn=$rtn.", ".$UserType[$ty]; 
                 }
                 return $rtn;
                // return $model->id;

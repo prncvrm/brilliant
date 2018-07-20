@@ -19,10 +19,10 @@ use app\models\Employee;
     <div class="row">
         <div class="col-md-3">
         <?php if(!$model->Resolved){?>
-    <?= $form->field($model, 'OldInTime')->textInput( ) ?>
+    <?= $form->field($model, 'OldInTime')->textInput( ['disabled'=>'true']) ?>
         </div>
         <div class="col-md-3">
-    <?= $form->field($model, 'OldOutTime')->textInput( ) ?>
+    <?= $form->field($model, 'OldOutTime')->textInput(['disabled'=>'true'] ) ?>
         </div>
         <div class="col-md-3">
     <?= $form->field($model, 'NewInTime')->textInput(['class'=>'form-control _time']) ?>
@@ -99,6 +99,3 @@ JS;
 $this->registerJs($js);
 ?>
 </div>
-<script type="text/javascript">
-    
-</script>

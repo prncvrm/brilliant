@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Branch;
+use app\models\LeaveRequest;
 
 /**
- * BranchSearch represents the model behind the search form of `app\models\Branch`.
+ * LeaveRequestSearch represents the model behind the search form of `app\models\LeaveRequest`.
  */
-class BranchSearch extends Branch
+class LeaveRequestSearch extends LeaveRequest
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class BranchSearch extends Branch
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['value'], 'safe'],
+            [['id', 'RaisedById', 'RaisedEmpId', 'Resolved'], 'integer'],
+            [['Reason'], 'safe'],
         ];
     }
 
@@ -41,15 +41,12 @@ class BranchSearch extends Branch
      */
     public function search($params)
     {
-        $query = Branch::find();
+        $query = LeaveRequest::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 40,
-            ],
         ]);
 
         $this->load($params);
@@ -63,9 +60,12 @@ class BranchSearch extends Branch
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'RaisedById' => $this->RaisedById,
+            'RaisedEmpId' => $this->RaisedEmpId,
+            'Resolved' => $this->Resolved,
         ]);
 
-        $query->andFilterWhere(['like', 'value', $this->value]);
+        $query->andFilterWhere(['like', 'Reason', $this->Reason]);
 
         return $dataProvider;
     }

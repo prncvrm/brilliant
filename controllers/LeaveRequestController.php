@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\AttendanceCriteria;
-use app\models\AttendanceCriteriaSearch;
+use app\models\LeaveRequest;
+use app\models\LeaveRequestSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AttendanceCriteriaController implements the CRUD actions for AttendanceCriteria model.
+ * LeaveRequestController implements the CRUD actions for LeaveRequest model.
  */
-class AttendanceCriteriaController extends Controller
+class LeaveRequestController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class AttendanceCriteriaController extends Controller
     }
 
     /**
-     * Lists all AttendanceCriteria models.
+     * Lists all LeaveRequest models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new AttendanceCriteriaSearch();
+        $searchModel = new LeaveRequestSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class AttendanceCriteriaController extends Controller
     }
 
     /**
-     * Displays a single AttendanceCriteria model.
+     * Displays a single LeaveRequest model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,25 +58,38 @@ class AttendanceCriteriaController extends Controller
     }
 
     /**
-     * Creates a new AttendanceCriteria model.
+     * Creates a new LeaveRequest model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($EmpCode,$Date)
     {
-        $model = new AttendanceCriteria();
+      
+        if (Yii::$app->request->isAjax) {
+            $model=$this->_findModel($EmpCode,$Date);
+            if($model==null){
+                $model=new LeaveRequest;
+                $model->RaisedById=Yii::$app->User->identity->id;
+                $model->RaisedEmpId=$EmpCode;
+                $model->Date=$Date;
+                $model->Resolved=0;    
+            }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return print_r("['success']");
+            }
+            return $this->renderAjax('create', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        else{
+            print_r("Not Ajax Request");
+        }
     }
 
     /**
-     * Updates an existing AttendanceCriteria model.
+     * Updates an existing LeaveRequest model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -87,7 +100,7 @@ class AttendanceCriteriaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -96,7 +109,7 @@ class AttendanceCriteriaController extends Controller
     }
 
     /**
-     * Deletes an existing AttendanceCriteria model.
+     * Deletes an existing LeaveRequest model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -110,15 +123,21 @@ class AttendanceCriteriaController extends Controller
     }
 
     /**
-     * Finds the AttendanceCriteria model based on its primary key value.
+     * Finds the LeaveRequest model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return AttendanceCriteria the loaded model
+     * @return LeaveRequest the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    protected function _findModel($EmpId, $Date){
+        if(($model=LeaveRequest::findOne(['RaisedEmpId'=>$EmpId,'Date'=>$Date])) !==null){
+            return $model;
+        }
+
+    }
     protected function findModel($id)
     {
-        if (($model = AttendanceCriteria::findOne($id)) !== null) {
+        if (($model = LeaveRequest::findOne($id)) !== null) {
             return $model;
         }
 

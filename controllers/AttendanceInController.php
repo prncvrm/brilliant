@@ -15,6 +15,7 @@ use yii\db\Query;
 use app\models\Branch;
 use app\models\ChangeRequest;
 use app\models\AttendanceCriteria;
+use app\models\LeaveRequest;
 /**
  * AttendanceInController implements the CRUD actions for AttendanceIn model.
  */
@@ -173,12 +174,17 @@ class AttendanceInController extends Controller
         foreach(AttendanceCriteria::find()->all() as $ac){
             $attendance_criteria[$ac['Type']]=['min'=>$ac['MinHoursCount'],'max'=>$ac['MaxHoursCount']];
         }
+        $leave_record=[];
+        foreach(LeaveRequest::find()->all() as $lq){
+            $leave_record[$lq['Date']]=$lq['Resolved'];
+        }
         $searchModel = new AttendanceInSearch();
         return $this->render('attendance-in-view', [
             'searchModel' => $searchModel,
             'no_days'=>(int)$_no_days[0]["Days"],
             'present_days'=>$pst_days,
             'attendance_criteria'=>$attendance_criteria,
+            'leave_record'=>$leave_record,
         ]);
     }
 

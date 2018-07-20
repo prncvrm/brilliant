@@ -46,6 +46,7 @@ class BranchPermissionSearch extends BranchPermission
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            
         ]);
 
         $this->load($params);

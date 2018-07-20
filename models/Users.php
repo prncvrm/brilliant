@@ -69,6 +69,9 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      public function getBranches(){
         return BranchPermission::find()->all();
     }
+    public function getUsertype(){
+        return UserTypePermission::find()->all();
+    }
 
     /** INCLUDE USER LOGIN VALIDATION FUNCTIONS**/
     /**

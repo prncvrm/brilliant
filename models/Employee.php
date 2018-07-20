@@ -29,7 +29,7 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['EmployeeCode', 'EmployeeName', 'DeviceName', 'MacAddress','Branch'], 'required'],
+            [['EmployeeCode', 'EmployeeName', 'DeviceName', 'MacAddress','Branch','Designation'], 'required'],
             [['EmployeeCode'], 'string', 'max' => 10],
             [['EmployeeName', 'DeviceName'], 'string', 'max' => 255],
             [['MacAddress'], 'string', 'max' => 17],
@@ -38,7 +38,8 @@ class Employee extends \yii\db\ActiveRecord
             $this->addError($attribute, 'The country must be either "USA" or "Indonesia".');
             }
             }],*/
-            ['MacAddress', 'match', 'pattern' => '/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'message' => 'Mac Address can be in dd-dd-dd-dd-dd-dd format.']
+            ['MacAddress', 'match', 'pattern' => '/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'message' => 'Mac Address can be in dd-dd-dd-dd-dd-dd format.'],
+            ['EmployeeCode','match','pattern'=>'/^[A-Z]{1}\d{4}$/','message'=>'Employee Code Must be in X1234 format'],
         ];
     }
 
@@ -54,6 +55,7 @@ class Employee extends \yii\db\ActiveRecord
             'DeviceName' => 'Device Name',
             'MacAddress' => 'Mac Address',
             'Branch'=>'Branch Name',
+            'Designation'=>'Designation',
         ];
     }
     public static function findIdentityByMacAddress($token)

@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\AttendanceIn;
+use yii\filters\AccessControl;
+use app\models\Users;
 
 /**
  * ChangeRequestController implements the CRUD actions for ChangeRequest model.
@@ -21,6 +23,32 @@ class ChangeRequestController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'ruleConfig'=>[
+                    'class'=>\app\components\AccessRule::className(),
+                ],
+                'only' => ['reverse'],
+                'rules' => [
+                    [
+                        'actions' => ['index','create', 'update', 'delete','branch-details'],
+                           'allow' => true,
+                           // Allow users, moderators and admins to create
+                           'roles' => [
+                               Users::ROLE_ADMIN,
+                           ],
+                    ],
+                    [
+                        'actions' => ['index','create', 'update', 'delete','approve','delete',],
+                           'allow' => true,
+                           // Allow users, moderators and admins to create
+                           'roles' => [
+                               Users::ROLE_ADMIN,
+                               Users::ROLE_MODERATOR,
+                           ],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

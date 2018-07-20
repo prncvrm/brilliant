@@ -20,6 +20,9 @@ use app\models\Branch;
 
     <?php $form = ActiveForm::begin(); ?>
  <div class="row"><div class="col-md-3">
+<?php 
+if(Yii::$app->user->identity->UserType<=app\models\Users::ROLE_ADMIN){
+?>
     <?= $form->field($model, 'EmployeeCode')->textInput(['maxlength' => true]) ?>
   </div>
 <div class="col-md-3">
@@ -31,9 +34,32 @@ use app\models\Branch;
   <div class="col-md-6">
     <?= $form->field($model, 'EmployeeName')->textInput(['maxlength' => true]) ?>
 </div></div>
-<div class="row"><div class="col-md-6">
+<?php }
+else{
+
+?>
+    <?= $form->field($model, 'EmployeeCode')->textInput(['maxlength' => true,'disabled'=>true]) ?>
+  </div>
+<div class="col-md-3">
+    <?= $form->field($model, 'Branch')->dropDownList(
+        yii\helpers\ArrayHelper::map(Branch::find()->leftJoin('branchpermission','branch.id = branchpermission.Branch')->where(['=','Users',Yii::$app->User->identity->id])->all(),'id','value'),
+        ['prompt'=>'Select Branch Name','disabled'=>true]
+    )  ?>
+</div>
+  <div class="col-md-6">
+    <?= $form->field($model, 'EmployeeName')->textInput(['maxlength' => true,'disabled'=>true]) ?>
+</div></div>
+<?php
+}
+?>
+<div class="row"><div class="col-md-4">
+    <?= $form->field($model, 'Designation')->dropDownList(
+      yii\helpers\ArrayHelper::map(app\models\UserType::find()->all(),'id','value'),
+        ['prompt'=>'Select Designation']
+      ) ?>
+</div><div class="col-md-4">
     <?= $form->field($model, 'DeviceName')->textInput(['maxlength' => true]) ?>
-</div><div class="col-md-6">
+</div><div class="col-md-4">
     <?= $form->field($model, 'MacAddress')->textInput(['maxlength' => true]) ?>
 </div></div>
 

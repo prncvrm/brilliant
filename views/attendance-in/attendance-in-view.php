@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
     
     ?>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
     <table class="table table-striped">
   <tr>
     <th>Date</th>
@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <th>Attendance</th>
     <th>Change/Request</th>
+    <th>Request Leave</th>
   </tr>
   <?php for($i=1;$i<=$no_days;++$i){?>
   <tr>
@@ -120,15 +121,41 @@ $this->params['breadcrumbs'][] = $this->title;
         }
       ?>
     </td>
+    <td>
+      <?php if(array_key_exists($date,$leave_record)){
+          if($leave_record[$date]==0){
+        ?>
+      
+      <button class="request btn btn-warning" href="<?=Yii::$app->homeUrl?>leave-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&Date=<?=$date?>"><small><small>Leave Requested</small></small></button>
+      <?php 
+      }
+      else if($leave_record[$date]==-1){
+        ?>
+        <button class="request btn btn-danger" href="<?=Yii::$app->homeUrl?>leave-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&Date=<?=$date?>"><small><small>Leave Rejected</small></small></button>
+        <?php
+      }
+      else
+      {
+        ?>
+        <button class="request btn btn-success" href="<?=Yii::$app->homeUrl?>leave-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&Date=<?=$date?>"><small><small>Leave Accepted</small></small></button>
+        <?php
+      }
+      }
+      else{
+        ?>
+        <button class="request btn btn-primary" href="<?=Yii::$app->homeUrl?>leave-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&Date=<?=$date?>"><small><small>Request Leave </small></small></button>
+        <?php
+      } ?>
+    </td>
   </tr>
 <?php }?>
 </table>
 </div>
-<div class="col-md-4" style="font-size:18px;">
-    <p><b>Number of Working Hours :</b> <?php global $total_minutes;
-echo($total_minutes/60);
+<div class="col-md-3" style="font-size:18px;">
+    <p><b>Working Hours :</b> <?php global $total_minutes;
+echo round($total_minutes/60);
         ?> Hours</p>
-    <p><b>Number of Present Days :</b> <?php echo count($present_days);
+    <p><b>Present Days :</b> <?php echo count($present_days);
         ?></p>
 </div>
 </div>
@@ -138,7 +165,7 @@ echo($total_minutes/60);
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Make Change Request</h4>
+        <h4 class="modal-title" id="myModalLabel">Make Request</h4>
       </div>
       <div class="modal-body">
         Please Wait... Loading...

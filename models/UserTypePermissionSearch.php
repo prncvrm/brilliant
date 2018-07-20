@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Branch;
+use app\models\UserTypePermission;
 
 /**
- * BranchSearch represents the model behind the search form of `app\models\Branch`.
+ * UserTypePermissionSearch represents the model behind the search form of `app\models\UserTypePermission`.
  */
-class BranchSearch extends Branch
+class UserTypePermissionSearch extends UserTypePermission
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,7 @@ class BranchSearch extends Branch
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['value'], 'safe'],
+            [['id', 'Users', 'UserType'], 'integer'],
         ];
     }
 
@@ -41,15 +40,12 @@ class BranchSearch extends Branch
      */
     public function search($params)
     {
-        $query = Branch::find();
+        $query = UserTypePermission::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 40,
-            ],
         ]);
 
         $this->load($params);
@@ -63,9 +59,9 @@ class BranchSearch extends Branch
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'Users' => $this->Users,
+            'UserType' => $this->UserType,
         ]);
-
-        $query->andFilterWhere(['like', 'value', $this->value]);
 
         return $dataProvider;
     }

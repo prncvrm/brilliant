@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],*/
             
             ['attribute'=>'UserType',
-            'label'=>'User Type',
+            'label'=>'Permissions',
              'contentOptions' => ['class'=>'badge badge-success'],
              'value'=>function($model) use($_model){
                 $UserType=\yii\helpers\ArrayHelper::map(UserType::find()->all(),'id','value');

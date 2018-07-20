@@ -13,7 +13,7 @@ nbproject
 Thumbs.db
 
 # config folder
-/config
+#/config
 
 # composer itself is not needed
 composer.phar

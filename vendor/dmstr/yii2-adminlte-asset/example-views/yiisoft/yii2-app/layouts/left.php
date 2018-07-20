@@ -53,7 +53,7 @@
                         'items' => [
                             /*['label' => 'Employee Profile', 'icon' => 'circle-o', 'url' => ['/employee-management/create'],],
                             ['label' => 'Employee Details', 'icon' => 'circle-o', 'url' => ['/employee-management/index'],],*/
-                            ['label' => 'Add Employee', 'icon' => 'circle-o', 'url' => ['/employee/create'],],
+                            ['label' => 'Add Employee', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
                           
                         ],
                     ],

@@ -42,7 +42,8 @@ class EmployeeSearch extends Employee
     public function search($params)
     {
         $branch_query=Branch::find()->select(['branch.id'])->leftJoin('branchpermission','branch.id = branchpermission.Branch')->where(['=','Users',Yii::$app->User->identity->id]);
-        $query = Employee::find()->where(['in','Branch',$branch_query]);
+        $permission_query=UserType::find()->select(['usertype.id'])->leftJoin('roleassignment','usertype.id = roleassignment.UserType')->where(['=','Users',Yii::$app->User->identity->id]);
+        $query = Employee::find()->where(['in','Branch',$branch_query])->andFilterWhere(['in','Designation',$permission_query]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
