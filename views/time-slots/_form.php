@@ -20,6 +20,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'DeadOut')->textInput() ?>
 
+    <?= $form->field($model, 'MaxDeadOutCount')->textInput() ?>
+    
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

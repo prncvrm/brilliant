@@ -29,8 +29,8 @@ class TimeSlots extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['InTime', 'OutTime', 'Grace', 'DeadOut'], 'required'],
-            [['InTime', 'OutTime', 'Grace', 'DeadOut'], 'safe'],
+            [['InTime', 'OutTime', 'Grace', 'DeadOut','MaxDeadOutCount'], 'required'],
+            [['InTime', 'OutTime', 'Grace', 'DeadOut','MaxDeadOutCount'], 'safe'],
         ];
     }
 

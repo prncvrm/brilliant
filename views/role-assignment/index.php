@@ -30,13 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
             
             ['attribute'=>'UserType',
             'label'=>'Permissions',
-             'contentOptions' => ['class'=>'badge badge-success'],
+             //'contentOptions' => ['class'=>'badge badge-success'],
              'value'=>function($model) use($_model){
                 $UserType=\yii\helpers\ArrayHelper::map(UserType::find()->all(),'id','value');
                 $rtn =" ";
                 if(array_key_exists($model->id,(\yii\helpers\ArrayHelper::map($_model->roles, 'id', 'UserType','Users')))){
                 foreach((\yii\helpers\ArrayHelper::map($_model->roles, 'id', 'UserType','Users')[$model->id]) as $ty)
-                    $rtn=$rtn.", ".$UserType[$ty]; 
+                    $rtn=$rtn.", ||".$UserType[$ty]." ||"; 
                     
                 } 
                 return $rtn;

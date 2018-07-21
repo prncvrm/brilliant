@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'OutTime',
             'Grace',
             'DeadOut',
+            'MaxDeadOutCount',
 
             ['class' => 'yii\grid\ActionColumn',
             'template'=>'{update}'

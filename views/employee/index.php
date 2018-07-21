@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\TimeSlots;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EmployeeSearch */
@@ -10,7 +11,7 @@ use yii\grid\GridView;
 $this->title = 'Employees';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="employee-index">
+<div class="employee-index" style="font-size:12px;">
 
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -20,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id',
+            //'id',
             'EmployeeCode',
             'EmployeeName',
             'DeviceName',
@@ -40,7 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             },
             ],
+            ['attribute'=>'TimeSlot',
+            'value'=>function($model){
 
+                return TimeSlots::findAll(['id'=>$model->TimeSlot])[0]['InTime']." - ".TimeSlots::findAll(['id'=>$model->TimeSlot])[0]['OutTime'];
+            }], 
             ['class' => 'yii\grid\ActionColumn',
             'visible'=>Yii::$app->user->identity->UserType<=app\models\Users::ROLE_ADMIN,
             'template'=>'{update}{view}',

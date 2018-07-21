@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\models\EmployeeManagement;
+use app\models\Employee;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UsersSearch */
@@ -31,8 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //'UserPassword',
             ['attribute'=>'Employee',
             'value'=>function($model){
-                $emp = EmployeeManagement::findAll(['id'=>$model->Employee])[0];
-                return $emp['FirstName']." ".$emp['MiddleName']." ".$emp['LastName'];
+                $emp = Employee::findAll(['id'=>$model->Employee])[0];
+                return $emp['EmployeeName'];
             }
             ],
             ['attribute'=>'UserType',

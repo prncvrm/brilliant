@@ -14,7 +14,7 @@ use app\models\Years;
 use yii\db\Query;
 use app\models\Branch;
 use app\models\ChangeRequest;
-use app\models\AttendanceCriteria;
+use app\models\TimeSlots;
 use app\models\LeaveRequest;
 /**
  * AttendanceInController implements the CRUD actions for AttendanceIn model.
@@ -171,8 +171,8 @@ class AttendanceInController extends Controller
             
         }
         $attendance_criteria=[];
-        foreach(AttendanceCriteria::find()->all() as $ac){
-            $attendance_criteria[$ac['Type']]=['min'=>$ac['MinHoursCount'],'max'=>$ac['MaxHoursCount']];
+        foreach(TimeSlots::find()->all() as $ac){
+            $attendance_criteria[$ac['id']]=['InTime'=>$ac['InTime'],'OutTime'=>$ac['OutTime'],'Grace'=>$ac['Grace'],'DeadOut'=>$ac['DeadOut'],'MaxDeadOutCount'=>$ac['MaxDeadOutCount']];
         }
         $leave_record=[];
         foreach(LeaveRequest::find()->all() as $lq){

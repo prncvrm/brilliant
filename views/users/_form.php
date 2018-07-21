@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-use app\models\EmployeeManagement;
+use app\models\Employee;
 use app\models\UserType;
 /* @var $this yii\web\View */
 /* @var $model app\models\Users */
@@ -30,7 +30,7 @@ use app\models\UserType;
     <?= $form->field($model, 'UserPassword')->textInput(['maxlength' => true]) ?>
     </div><div class="col-md-6">
     <?= $form->field($model, 'Employee')->dropDownList(
-        ArrayHelper::map(EmployeeManagement::find()->all(),'id','FirstName'),
+        ArrayHelper::map(Employee::find()->all(),'id','EmployeeName'),
         ['prompt'=>'Select Employee']
     ) ?> 
     </div></div>

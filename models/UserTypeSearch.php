@@ -47,6 +47,7 @@ class UserTypeSearch extends UserType
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination'=>false,
         ]);
 
         $this->load($params);

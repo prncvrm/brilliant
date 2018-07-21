@@ -46,6 +46,7 @@ class RoleAssignmentSearch extends RoleAssignment
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            
         ]);
 
         $this->load($params);
