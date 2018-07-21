@@ -42,6 +42,7 @@
                             ['label' => 'Role Entry', 'icon' => 'circle-o', 'url' => ['/user-type/index'],],
                             ['label' => 'Role Permission', 'icon' => 'circle-o', 'url' => ['/role-assignment/index'],],
                             ['label' => 'Branch Permission', 'icon' => 'circle-o', 'url' => ['/branch-permission/index'],],
+                            ['label' => 'Time Slots', 'icon' => 'circle-o', 'url' => ['/time-slots/index'],],
                         ],
                     ],
                     ['label' => 'Employee Management', 'options' => ['class' => 'header']],
