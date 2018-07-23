@@ -17,8 +17,8 @@ use Yii;
 class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     const ROLE_ADMIN = 1;
-    const ROLE_MODERATOR = 5;
-    const ROLE_USER = 6;
+    const ROLE_MODERATOR = 57;
+    const ROLE_USER = 58;
     /**
      * {@inheritdoc}
      */

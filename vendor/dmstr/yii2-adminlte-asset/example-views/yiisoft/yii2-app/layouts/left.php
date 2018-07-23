@@ -52,9 +52,7 @@
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
-                            /*['label' => 'Employee Profile', 'icon' => 'circle-o', 'url' => ['/employee-management/create'],],
-                            ['label' => 'Employee Details', 'icon' => 'circle-o', 'url' => ['/employee-management/index'],],*/
-                            ['label' => 'Add Employee', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
+                            ['label' => 'View Employee', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
                           
                         ],
                     ],
@@ -73,7 +71,7 @@
                     ['label' => 'Attendance Management', 'options' => ['class' => 'header']],
                     [
                         'label' => 'Attendance Management',
-                        'visible'=>Yii::$app->user->identity->UserType==app\models\Users::ROLE_MODERATOR,
+                        'visible'=>Yii::$app->user->identity->UserType<=app\models\Users::ROLE_MODERATOR,
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
