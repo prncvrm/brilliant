@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             ],
             ['attribute'=>'TimeSlot',
+            'visible'=>Yii::$app->user->identity->UserType<=app\models\Users::ROLE_ADMIN,
             'value'=>function($model){
 
                 return TimeSlots::findAll(['id'=>$model->TimeSlot])[0]['InTime']." - ".TimeSlots::findAll(['id'=>$model->TimeSlot])[0]['OutTime'];

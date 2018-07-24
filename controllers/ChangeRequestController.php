@@ -23,7 +23,7 @@ class ChangeRequestController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
+            /*'access' => [
                 'class' => AccessControl::className(),
                 'ruleConfig'=>[
                     'class'=>\app\components\AccessRule::className(),
@@ -48,7 +48,7 @@ class ChangeRequestController extends Controller
                            ],
                     ],
                 ],
-            ],
+            ],*/
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
