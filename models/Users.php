@@ -33,7 +33,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['UserName', 'UserEmailId', 'UserPassword', 'Employee', 'UserType'], 'required'],
+            [['UserName', 'UserEmailId', 'UserPassword', 'Employee', 'UserType','AccessLevel'], 'required'],
             [['Employee', 'UserType'], 'integer'],
             [['UserName', 'UserEmailId', 'UserPassword'], 'string', 'max' => 255],
         ];
@@ -50,9 +50,10 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'UserEmailId' => 'User Email ID',
             'UserPassword' => 'User Password',
             'Employee' => 'Employee Name',
-            'UserType' => 'User Type',
+            'UserType' => 'Role Type',
             'Status'=>'Status',
             'LastLogin' =>'Last Login',
+            'AccessLevel'=>'Access Level',
         ];
     }
     /**

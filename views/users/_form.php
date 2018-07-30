@@ -39,7 +39,12 @@ use app\models\UserType;
         ArrayHelper::map(UserType::find()->all(),'id','value'),
         ['prompt'=>'Select User Type']
     ) ?> 
-</div> </div>
+</div><div class="col-md-6">
+    <?= $form->field($model, 'AccessLevel')->dropDownList(
+        [1=>'Admin',2=>'Moderator',3=>'User'],
+        ['prompt'=>'Select Access Level']
+    ) ?> 
+</div></div>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
