@@ -8,6 +8,7 @@ use app\models\LeaveRequestSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\AttendanceIn;
 
 /**
  * LeaveRequestController implements the CRUD actions for LeaveRequest model.
@@ -87,6 +88,21 @@ class LeaveRequestController extends Controller
             print_r("Not Ajax Request");
         }
     }
+    public function actionApprove($id)
+    {
+        $_model=$this->findModel($id);
+        if($_model){
+            $model=new AttendanceIn;
+            $model->EmployeeId=$_model->RaisedEmpId;
+            $model->Date=$_model->Date;
+            $model->Time="null";
+            $model->OutTime="null";
+            $_model->Resolved=1;
+            if($model->save()&&$_model->save())
+                return $this->redirect(['index']);     
+        }
+        throw new NotFoundHttpException('Some Issue, Fixing it.');
+    }
 
     /**
      * Updates an existing LeaveRequest model.
@@ -117,9 +133,14 @@ class LeaveRequestController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $_model=$this->findModel($id);
+        if($_model->Resolved==1)
+            return $this->redirect(['index']);
+        $_model->Resolved=1;
+        $_model->Reason=$_model->Reason."(Rejected)";
+        if($_model->save())    
+            return $this->redirect(['index']);
+        throw new NotFoundHttpException('Some Issue, Fixing it.');
     }
 
     /**

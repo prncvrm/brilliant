@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->Resolved == 0? Html::a('<span class="glyphicon glyphicon-ok"></span>', yii\helpers\Url::to(['change-request/approve', 'id'=>$model->id]),['title'=>Yii::t('app','Approve'),'data-confirm'=>'Are you sure you want to Approve this?','data-method'=>'POST','data-pjax'=>"0"]):"";
                 },
                 'delete'=>function($url,$model){
-                    return $model->Resolved == 0?Html::a('<span class="glyphicon glyphicon-remove"></span>', yii\helpers\Url::to(['change-request/delete', 'id'=>$model->id]),['title'=>Yii::t('app','Approve'),'data-confirm'=>'Are you sure you want to Reject this?','data-method'=>'POST','data-pjax'=>"0"]):"";
+                    return $model->Resolved == 0?Html::a('<span class="glyphicon glyphicon-remove"></span>', yii\helpers\Url::to(['change-request/delete', 'id'=>$model->id]),['title'=>Yii::t('app','Reject'),'data-confirm'=>'Are you sure you want to Reject this?','data-method'=>'POST','data-pjax'=>"0"]):"";
                 },
                 
             ],

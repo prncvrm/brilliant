@@ -33,6 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
    
     function atten_value($attendance_criteria,$emp_time_slot_id,$in_time,$out_time){
       global $grace_counts;
+      if($in_time=="00:00:00" || $out_time=="00:00:00"){
+        return "Absent";
+      }
       if(strcmp($in_time,$attendance_criteria[$emp_time_slot_id]['Grace'])<0)
         return "Present";
       else if(strcmp($in_time,$attendance_criteria[$emp_time_slot_id]['Grace'])>0 && strcmp($in_time,$attendance_criteria[$emp_time_slot_id]['DeadOut'])<0){
@@ -68,10 +71,26 @@ $this->params['breadcrumbs'][] = $this->title;
   <?php for($i=1;$i<=$no_days;++$i){?>
   <tr>
     <td><?=add_zero($i)."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-".Yii::$app->request->queryParams['AttendanceInSearch']["Year"]?></td>
-    <td style="color:green;font-size: 17px;"><?php
+    <?php
     $date=Yii::$app->request->queryParams['AttendanceInSearch']["Year"]."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-".add_zero($i);
-    if(array_key_exists($date,$present_days))
+    if(array_key_exists($date,$present_days)){
+      if($present_days[$date]["InTime"]=="00:00:00"){
+    ?>
+  <td style="color:red;font-size: 17px;"><?php
+        echo "&#10007;";
+      }
+      else{
+        ?>
+        <td style="color:green;font-size: 17px;">
+        <?php
         echo "&#10004;";
+      }
+    }
+    else{
+      ?>
+      <td style="font-size: 17px;">
+      <?php
+    }
     ?></td>
     <td style="color:green;font-size: 18px">
     <?php
@@ -105,6 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
     if(isset($present_days[$date]["OutTime"])){
       echo atten_value($attendance_criteria,Employee::findAll(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])[0]['TimeSlot'] ,$present_days[$date]["InTime"],$present_days[$date]["OutTime"]);
       }
+
     ?>
     </td>
     <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ 
@@ -126,6 +146,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <button class="request btn btn-primary" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=<?=$present_days[$date]['OutTime']?>&Date=<?=$date?>">Make Req</button>
           <?php
           }
+        }
+        else if (isset($present_days[$date])) {
+          ?>
+          <button class="request btn btn-info" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&InTime=<?=$present_days[$date]['InTime']?>&OutTime=null&Date=<?=$date?>">Make Req</button>
+          <?php
+        }
+        else{
+          ?>
+          <button class="request btn btn-info" href="<?=Yii::$app->homeUrl?>change-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&InTime=null&OutTime=null&Date=<?=$date?>">Make Req</button>
+          <?php
         }
       ?>
     </td>

@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\leavecategory;
+use app\models\LeaveCategory;
 
 
 /* @var $this yii\web\View */
@@ -18,7 +18,10 @@ use app\models\leavecategory;
             <?php if(!$model->Resolved){?>
     <?=$form->field($model,'Date')->textInput(['disabled'=>true]) ?>
     	</div><div class="col-md-6">
-    <?=$form->field($model,'Type')->textInput()?>
+  <?= $form->field($model, 'Type')->dropDownList(
+        yii\helpers\ArrayHelper::map(LeaveCategory::find()->all(),'id','Name'),
+        ['prompt'=>'Select Type']
+    ) ?>
 </div></div>
     <div class="row">
         <div class="col-md-12">
@@ -27,7 +30,10 @@ use app\models\leavecategory;
 <?php }else {?>
 <?=$form->field($model,'Date')->textInput(['disabled'=>true]) ?>
         </div><div class="col-md-6">
-    <?=$form->field($model,'Type')->textInput(['disabled'=>true])?>
+             <?= $form->field($model, 'Type')->dropDownList(
+        yii\helpers\ArrayHelper::map(LeaveCategory::find()->all(),'id','Name'),
+        ['prompt'=>'Select Type']
+    ) ?>
 </div></div>
     <div class="row">
         <div class="col-md-12">
