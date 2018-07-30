@@ -99,6 +99,7 @@
                         'items' => [
                             
                             ['label' => 'Employee Attendance', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
+                            ['label' => 'Month Off', 'icon' => 'circle-o', 'url' => ['/month-off/index'],],
                             ['label' => 'Change Request', 'icon' => 'circle-o', 'url' => ['/change-request/reverse-index'],],
                             ['label' => 'Leave Request', 'icon' => 'circle-o', 'url' => ['/leave-request/index'],],
                             ['label' => 'Employee Criteria', 'icon' => 'circle-o', 'url' => ['/attendance-criteria/index'],],

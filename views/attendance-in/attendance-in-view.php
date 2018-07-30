@@ -68,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <th>Change/Request</th>
     <th>Request Leave</th>
   </tr>
+  <?php print_r($month_off);?>
   <?php for($i=1;$i<=$no_days;++$i){
     if(in_array($i, $month_off)){
       ?>

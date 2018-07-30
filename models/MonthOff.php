@@ -32,6 +32,7 @@ class MonthOff extends \yii\db\ActiveRecord
             [['BranchId', 'Dates', 'Month', 'Year'], 'required'],
             [['BranchId', 'Month', 'Year'], 'integer'],
             [['Dates'], 'string', 'max' => 255],
+            ['Dates','match','pattern'=>'/([0-9,])+(\d,$)/','message'=>'Format is 1,2,3,. Must end with ,(comma)'],
         ];
     }
 
