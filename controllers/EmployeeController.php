@@ -38,7 +38,7 @@ class EmployeeController extends Controller
                            ],
                     ],
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index','view','create'],
                            'allow' => true,
                            // Allow users, moderators and admins to create
                            'roles' => [
