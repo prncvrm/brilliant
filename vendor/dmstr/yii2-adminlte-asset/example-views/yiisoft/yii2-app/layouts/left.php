@@ -34,7 +34,7 @@
                     ['label' => 'User Management', 'options' => ['class' => 'header']],
                     [
                         'label' => 'User Permission',
-                        'visible'=>Yii::$app->user->identity->UserType<=app\models\Users::ROLE_ADMIN,
+                        'visible'=>Yii::$app->user->identity->AccessLevel<=app\models\Users::ROLE_ADMIN,
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
@@ -48,7 +48,7 @@
                     ['label' => 'Employee Management', 'options' => ['class' => 'header']],
                     [
                         'label' => 'Manage Employee',
-                        'visible'=>Yii::$app->user->identity->UserType==app\models\Users::ROLE_USER,
+                        'visible'=>Yii::$app->user->identity->AccessLevel<=app\models\Users::ROLE_USER,
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
@@ -56,22 +56,19 @@
                           
                         ],
                     ],
-                    [
+                    /*[
                         'label' => 'Manage Employee',
                         'visible'=>Yii::$app->user->identity->UserType<=app\models\Users::ROLE_MODERATOR,
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
-                            /*['label' => 'Employee Profile', 'icon' => 'circle-o', 'url' => ['/employee-management/create'],],
-                            ['label' => 'Employee Details', 'icon' => 'circle-o', 'url' => ['/employee-management/index'],],*/
-                            /*['label' => 'Add Employee', 'icon' => 'circle-o', 'url' => ['/employee/create'],],*/
                             ['label' => 'View Employee', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
                         ],
-                    ],
+                    ],*/
                     ['label' => 'Attendance Management', 'options' => ['class' => 'header']],
                     [
                         'label' => 'Attendance Management',
-                        'visible'=>Yii::$app->user->identity->UserType<=app\models\Users::ROLE_MODERATOR && Yii::$app->user->identity->UserType > app\models\Users::ROLE_ADMIN,
+                        'visible'=>Yii::$app->user->identity->AccessLevel==app\models\Users::ROLE_MODERATOR && Yii::$app->user->identity->UserType > app\models\Users::ROLE_ADMIN,
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
@@ -82,7 +79,7 @@
                     ],
                     [
                         'label' => 'Attendance Management',
-                        'visible'=>Yii::$app->user->identity->UserType==app\models\Users::ROLE_USER,
+                        'visible'=>Yii::$app->user->identity->AccessLevel==app\models\Users::ROLE_USER,
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
@@ -93,7 +90,7 @@
                     ],
                     [
                         'label' => 'Attendance Management',
-                        'visible'=>Yii::$app->user->identity->UserType<=app\models\Users::ROLE_ADMIN,
+                        'visible'=>Yii::$app->user->identity->AccessLevel==app\models\Users::ROLE_ADMIN,
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [

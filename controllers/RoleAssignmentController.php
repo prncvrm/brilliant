@@ -29,10 +29,10 @@ class RoleAssignmentController extends Controller
                 'ruleConfig'=>[
                     'class'=>\app\components\AccessRule::className(),
                 ],
-                'only' => ['index','create', 'update', 'delete','branch-details'],
+                'only' => ['index','create', 'update', 'delete','role-details'],
                 'rules' => [
                     [
-                        'actions' => ['index','create', 'update', 'delete','branch-details'],
+                        'actions' => ['index','create', 'update', 'delete','role-details'],
                            'allow' => true,
                            // Allow users, moderators and admins to create
                            'roles' => [

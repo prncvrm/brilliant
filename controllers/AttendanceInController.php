@@ -69,6 +69,7 @@ class AttendanceInController extends Controller
     public function behaviors()
     {
         return [
+
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -200,7 +201,7 @@ class AttendanceInController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+/*    public function actionCreate()
     {
         $model = new AttendanceIn();
 
@@ -212,7 +213,7 @@ class AttendanceInController extends Controller
             'model' => $model,
         ]);
     }
-
+*/
     /**
      * Updates an existing AttendanceIn model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -220,7 +221,7 @@ class AttendanceInController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+/*    public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
@@ -232,7 +233,7 @@ class AttendanceInController extends Controller
             'model' => $model,
         ]);
     }
-
+*/
     /**
      * Deletes an existing AttendanceIn model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -240,13 +241,13 @@ class AttendanceInController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+/*    public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
-
+*/
     /**
      * Finds the AttendanceIn model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

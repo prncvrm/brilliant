@@ -9,6 +9,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\AttendanceIn;
+use yii\filters\AccessControl;
+use app\models\Users;
+
 
 /**
  * LeaveRequestController implements the CRUD actions for LeaveRequest model.
@@ -21,6 +24,25 @@ class LeaveRequestController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'ruleConfig'=>[
+                    'class'=>\app\components\AccessRule::className(),
+                ],
+                'only' => ['index','create', 'update', 'delete','reverse-index','approve','reverse'],
+                'rules' => [
+                    [
+                        'actions' => ['index','create', 'update', 'delete','approve'],
+                           'allow' => true,
+                           // Allow users, moderators and admins to create
+                           'roles' => [
+                               Users::ROLE_ADMIN,
+                               Users::ROLE_MODERATOR,
+                           ],
+                    ],
+
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

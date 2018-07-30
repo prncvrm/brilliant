@@ -8,7 +8,8 @@ use app\models\EmployeeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\filters\AccessControl;
+use app\models\Users;
 /**
  * EmployeeController implements the CRUD actions for Employee model.
  */
@@ -20,6 +21,32 @@ class EmployeeController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'ruleConfig'=>[
+                    'class'=>\app\components\AccessRule::className(),
+                ],
+                'only' => ['index','create', 'update', 'delete','reverse-index','approve','reverse'],
+                'rules' => [
+                    [
+                        'actions' => ['index','create', 'update', 'delete',],
+                           'allow' => true,
+                           // Allow users, moderators and admins to create
+                           'roles' => [
+                               Users::ROLE_ADMIN,
+                               Users::ROLE_MODERATOR,
+                           ],
+                    ],
+                    [
+                        'actions' => ['index','view'],
+                           'allow' => true,
+                           // Allow users, moderators and admins to create
+                           'roles' => [
+                               Users::ROLE_USER,
+                           ],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

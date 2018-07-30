@@ -12,6 +12,7 @@ use app\models\AttendanceIn;
 use yii\filters\AccessControl;
 use app\models\Users;
 
+
 /**
  * ChangeRequestController implements the CRUD actions for ChangeRequest model.
  */
@@ -23,23 +24,15 @@ class ChangeRequestController extends Controller
     public function behaviors()
     {
         return [
-            /*'access' => [
+            'access' => [
                 'class' => AccessControl::className(),
                 'ruleConfig'=>[
                     'class'=>\app\components\AccessRule::className(),
                 ],
-                'only' => ['index'],
+                'only' => ['index','create', 'update', 'delete','reverse-index','approve','reverse'],
                 'rules' => [
                     [
-                        'actions' => ['index','create', 'update', 'delete','branch-details'],
-                           'allow' => true,
-                           // Allow users, moderators and admins to create
-                           'roles' => [
-                               Users::ROLE_ADMIN,
-                           ],
-                    ],
-                    [
-                        'actions' => ['index','create', 'update', 'delete','approve','delete',],
+                        'actions' => ['index','create', 'update', 'delete','reverse-index','approve','reverse'],
                            'allow' => true,
                            // Allow users, moderators and admins to create
                            'roles' => [
@@ -47,8 +40,16 @@ class ChangeRequestController extends Controller
                                Users::ROLE_MODERATOR,
                            ],
                     ],
+                    [
+                        'actions' => ['reverse-index'],
+                           'allow' => true,
+                           // Allow users, moderators and admins to create
+                           'roles' => [
+                               Users::ROLE_ADMIN,
+                           ],
+                    ],
                 ],
-            ],*/
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
