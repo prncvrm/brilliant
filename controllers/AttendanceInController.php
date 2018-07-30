@@ -180,7 +180,10 @@ class AttendanceInController extends Controller
             $leave_record[$lq['Date']]=$lq['Resolved'];
         }
         $month_off=MonthOff::find()->select(["Dates"])->where(['BranchId'=>29])->andWhere(['Month'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])])->andWhere(['Year'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Year"])])->all();
-
+        if($month_off)
+            $month_off=array_map('intval',explode(',',$month_off[0]['Dates'],-1));
+        else
+            $month_off=[];
         $searchModel = new AttendanceInSearch();
         return $this->render('attendance-in-view', [
             'searchModel' => $searchModel,
@@ -188,7 +191,7 @@ class AttendanceInController extends Controller
             'present_days'=>$pst_days,
             'attendance_criteria'=>$attendance_criteria,
             'leave_record'=>$leave_record,
-            'month_off'=>array_map('intval',explode(',',$month_off[0]['Dates'],-1)),
+            'month_off'=>$month_off,
         ]);
     }
 
