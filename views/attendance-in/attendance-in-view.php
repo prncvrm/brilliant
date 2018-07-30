@@ -68,7 +68,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <th>Change/Request</th>
     <th>Request Leave</th>
   </tr>
-  <?php for($i=1;$i<=$no_days;++$i){?>
+  <?php for($i=1;$i<=$no_days;++$i){
+    if(in_array($i, $month_off)){
+      ?>
+      <tr>
+<td><?=add_zero($i)."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-".Yii::$app->request->queryParams['AttendanceInSearch']["Year"]?></td>
+<td colspan="6" style="font-size: 17px;"><span class="label label-danger">WeekOff/Holiday</span></td></tr>
+      <?php
+    }else{
+    ?>
   <tr>
     <td><?=add_zero($i)."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-".Yii::$app->request->queryParams['AttendanceInSearch']["Year"]?></td>
     <?php
@@ -186,7 +194,8 @@ $this->params['breadcrumbs'][] = $this->title;
       } ?>
     </td>
   </tr>
-<?php }?>
+<?php }
+}?>
 </table>
 </div>
 <div class="col-md-3" style="font-size:18px;">

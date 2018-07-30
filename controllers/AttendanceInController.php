@@ -16,6 +16,7 @@ use app\models\Branch;
 use app\models\ChangeRequest;
 use app\models\TimeSlots;
 use app\models\LeaveRequest;
+use app\models\MonthOff;
 /**
  * AttendanceInController implements the CRUD actions for AttendanceIn model.
  */
@@ -178,6 +179,8 @@ class AttendanceInController extends Controller
         foreach(LeaveRequest::find()->all() as $lq){
             $leave_record[$lq['Date']]=$lq['Resolved'];
         }
+        $month_off=MonthOff::find()->select(["Dates"])->where(['BranchId'=>29])->andWhere(['Month'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])])->andWhere(['Year'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Year"])])->all();
+
         $searchModel = new AttendanceInSearch();
         return $this->render('attendance-in-view', [
             'searchModel' => $searchModel,
@@ -185,6 +188,7 @@ class AttendanceInController extends Controller
             'present_days'=>$pst_days,
             'attendance_criteria'=>$attendance_criteria,
             'leave_record'=>$leave_record,
+            'month_off'=>array_map('intval',explode(',',$month_off[0]['Dates'],-1)),
         ]);
     }
 
