@@ -29,7 +29,7 @@ use yii\helpers\ArrayHelper;
     	</div>
     	<div class='col-md-4'>
     		<?= $form->field($model, 'Year')->dropDownList(
-    		ArrayHelper::map(Years::find()->all(),'id','Year'),
+    		ArrayHelper::map(Years::find()->all(),'Year','Year'),
         	['prompt'=>'Select Year']
     		) ?>
     	</div>

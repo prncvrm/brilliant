@@ -33,11 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'Dates',
             'Month',
-            ['attribute'=>'Year',
-            'value'=>function($model){
-                return app\models\Years::findAll(['id'=>$model->Year])[0]['Year'];
-            }],
-
+            'Year',
+            
             ['class' => 'yii\grid\ActionColumn',
             'template'=>'{update}{delete}'],
         ],
