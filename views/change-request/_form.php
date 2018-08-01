@@ -91,9 +91,6 @@ $js=<<< JS
 }).on('submit',function(e){
       e.preventDefault();
       });
-$(document).ready(function(){
-    $('input._time').timepicker({ timeFormat: 'h:mm:ss p' });
-});
 JS;
 
 $this->registerJs($js);

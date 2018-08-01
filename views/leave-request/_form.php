@@ -4,37 +4,49 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\LeaveCategory;
 
-
 /* @var $this yii\web\View */
 /* @var $model app\models\LeaveRequest */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="leave-request-form">
-
     <?php $form = ActiveForm::begin(['id'=>'leave_request']); ?>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <?php if(!$model->Resolved){?>
     <?=$form->field($model,'Date')->textInput(['disabled'=>true]) ?>
-    	</div><div class="col-md-6">
+    	</div><div class="col-md-4">
   <?= $form->field($model, 'Type')->dropDownList(
-        yii\helpers\ArrayHelper::map(LeaveCategory::find()->all(),'id','Name'),
+        yii\helpers\ArrayHelper::map(LeaveCategory::find()->where(['id'=>$employeeModel->LeaveType])->all(),'id','Name')+yii\helpers\ArrayHelper::map(LeaveCategory::find()->where(['>','id',2])->all(),'id','Name'),
         ['prompt'=>'Select Type']
     ) ?>
-</div></div>
+</div>
+<div class="col-md-4">
+  <?= $form->field($model, 'Duration')->dropDownList(
+        [1=>'First Half',2=>'Second Half',3=>'Full Day'],
+        ['prompt'=>'Select Duration']
+    ) ?>
+</div>
+</div>
     <div class="row">
         <div class="col-md-12">
 
     <?= $form->field($model, 'Reason')->textarea(['rows' => 4]) ?>
 <?php }else {?>
 <?=$form->field($model,'Date')->textInput(['disabled'=>true]) ?>
-        </div><div class="col-md-6">
+        </div><div class="col-md-4">
              <?= $form->field($model, 'Type')->dropDownList(
-        yii\helpers\ArrayHelper::map(LeaveCategory::find()->all(),'id','Name'),
-        ['prompt'=>'Select Type']
+         yii\helpers\ArrayHelper::map(LeaveCategory::find()->where(['id'=>$employeeModel->LeaveType])->all(),'id','Name')+yii\helpers\ArrayHelper::map(LeaveCategory::find()->where(['>','id',2])->all(),'id','Name'),
+        ['prompt'=>'Select Type','disabled'=>true]
     ) ?>
-</div></div>
+</div>
+<div class="col-md-4">
+  <?= $form->field($model, 'Duration')->dropDownList(
+        [1=>'First Half',2=>'Second Half',3=>'Full Day'],
+        ['prompt'=>'Select Duration','disabled'=>true]
+    ) ?>
+</div>
+</div>
     <div class="row">
         <div class="col-md-12">
 
@@ -64,7 +76,7 @@ $js=<<< JS
             alert('Leave Request Submitted');
         },
         error: function () {
-            alert("Something went wrong");
+            alert("You have used your Paid Leave");
         }
     })
 }).on('submit',function(e){

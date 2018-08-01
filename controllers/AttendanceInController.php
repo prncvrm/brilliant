@@ -27,7 +27,23 @@ use app\models\MonthOff;
         else
             return $num;
     }
-
+    function atten_value($attendance_criteria,$emp_time_slot_id,$in_time,$out_time){
+      global $grace_counts;
+      if($in_time=="00:00:00" || $out_time=="00:00:00"){
+        return "Absent";
+      }
+      if(strcmp($in_time,$attendance_criteria[$emp_time_slot_id]['Grace'])<0)
+        return "Present";
+      else if(strcmp($in_time,$attendance_criteria[$emp_time_slot_id]['Grace'])>0 && strcmp($in_time,$attendance_criteria[$emp_time_slot_id]['DeadOut'])<0){
+          $grace_counts++;
+        if($grace_counts<=$attendance_criteria[$emp_time_slot_id]['MaxDeadOutCount'])
+          return "Present:(".$grace_counts." Late Count)";
+        else
+          return "Half Day";
+      }
+        else
+          return "Half Day";
+      }
 
   function get_client_ip() {
         $ipaddress = '';
@@ -87,6 +103,7 @@ class AttendanceInController extends Controller
     {   
         $mac=get_client_mac(get_client_ip());
         $employeeModel=Employee::findIdentityByMacAddress($mac);
+        
         if($employeeModel!=null){
             $model = new AttendanceIn();
             date_default_timezone_set('Asia/Calcutta');
@@ -96,6 +113,22 @@ class AttendanceInController extends Controller
                 $model->EmployeeId=$employeeModel->id;
                 $model->Date=date("Y-m-d");
                 $model->Time=date("H:i:s");
+                $timeSlotModel=TimeSlots::findOne(['id'=>$employeeModel->TimeSlot]);
+                if(strcmp($model->Time,$timeSlotModel->Grace)<0)
+                    $model->FirstHalf="P";
+                else if (strcmp($model->Time,$timeSlotModel->Grace)>0 && strcmp($model->Time,$timeSlotModel->DeadOut)<0){
+                        if($employeeModel->DeadOutCount>=$timeSlotModel->MaxDeadOutCount)
+                            $model->FirstHalf="A";
+                        else{
+                            $employeeModel->DeadOutCount+=1;
+                            $employeeModel->save();
+                            $model->Remark=$employeeModel->DeadOutCount." Late Count";
+                            $model->FirstHalf="P";
+                        }
+                }
+                else{
+                    $model->FirstHalf="A";
+                }
                 if($model->validate() && $model->save()){
                     return $this->renderPartial('attendance-in-success', [
                     'employeeModel'=>$employeeModel,
@@ -108,10 +141,7 @@ class AttendanceInController extends Controller
                 }
             }
             return AttendanceInController::actionOut();
-            /*return $this->renderPartial('attendance-in-success', [
-                    'employeeModel'=>$employeeModel,
-                    'model'=>$model,
-                ]);*/
+
         }
        else{
             print_r("<h1><p style='color:red;background-color:pink;border-color:#c3e6cb;'>No Such Device/Employee Registered</p></h1>");
@@ -133,6 +163,11 @@ class AttendanceInController extends Controller
                 return;
             }
             $model->OutTime=date("H:i:s");
+            $timeSlotModel=TimeSlots::findOne(['id'=>$employeeModel->TimeSlot]);
+            if(strcmp($model->OutTime,$timeSlotModel->OutTime)<0)
+                $model->SecondHalf="A";
+            else
+                $model->SecondHalf="P";
             if($model->validate() && $model->save()){
             return $this->renderPartial('attendance-out-success', [
                     'employeeModel'=>$employeeModel,
@@ -169,13 +204,13 @@ class AttendanceInController extends Controller
         $present_days=AttendanceIn::find()->where(['EmployeeId'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->andWhere(['and','Date>='.'"'.$start.'"','Date<='.'"'.$end.'"'])->all();
         $pst_days=[];
         foreach ($present_days as $pd) {
-            $pst_days[$pd["Date"]]=['InTime'=>$pd["Time"],'OutTime'=>$pd["OutTime"],"Resolved"=>(ChangeRequest::findOne(['RaisedEmpCode'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"],'Date'=>$pd["Date"]])["Resolved"])];
+            $pst_days[$pd["Date"]]=['InTime'=>$pd["Time"],'OutTime'=>$pd["OutTime"],"Resolved"=>(ChangeRequest::findOne(['RaisedEmpCode'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"],'Date'=>$pd["Date"]])["Resolved"]),"Attendance"=>$pd['FirstHalf']."-".$pd['SecondHalf'],"Remark"=>$pd['Remark']];
             
         }
-        $attendance_criteria=[];
+/*        $attendance_criteria=[];
         foreach(TimeSlots::find()->all() as $ac){
             $attendance_criteria[$ac['id']]=['InTime'=>$ac['InTime'],'OutTime'=>$ac['OutTime'],'Grace'=>$ac['Grace'],'DeadOut'=>$ac['DeadOut'],'MaxDeadOutCount'=>$ac['MaxDeadOutCount']];
-        }
+        }*/
         $leave_record=[];
         foreach(LeaveRequest::find()->all() as $lq){
             $leave_record[$lq['Date']]=$lq['Resolved'];
@@ -190,7 +225,6 @@ class AttendanceInController extends Controller
             'searchModel' => $searchModel,
             'no_days'=>(int)$_no_days[0]["Days"],
             'present_days'=>$pst_days,
-            'attendance_criteria'=>$attendance_criteria,
             'leave_record'=>$leave_record,
             'month_off'=>$month_off,
         ]);

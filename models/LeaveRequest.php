@@ -29,8 +29,8 @@ class LeaveRequest extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['RaisedById', 'RaisedEmpId', 'Reason', 'Resolved','Type'], 'required'],
-            [['RaisedById', 'RaisedEmpId', 'Resolved','Type'], 'integer'],
+            [['RaisedById', 'RaisedEmpId', 'Reason', 'Resolved','Type','Duration'], 'required'],
+            [['RaisedById', 'RaisedEmpId', 'Resolved','Type','Duration'], 'integer'],
             [['Reason'], 'string'],
         ];
     }

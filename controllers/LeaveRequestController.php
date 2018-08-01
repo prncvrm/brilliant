@@ -11,6 +11,8 @@ use yii\filters\VerbFilter;
 use app\models\AttendanceIn;
 use yii\filters\AccessControl;
 use app\models\Users;
+use app\models\Employee;
+use app\models\LeaveHistory;
 
 
 /**
@@ -97,13 +99,19 @@ class LeaveRequestController extends Controller
                 $model->Date=$Date;
                 $model->Resolved=0;    
             }
-
-
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return print_r("['success']");
+            $employeeModel=Employee::findOne($EmpCode);
+            $leaveHistory=LeaveHistory::findOne(["EmployeeId"=>$EmpCode]);
+            if ($model->load(Yii::$app->request->post())) {
+                if($leaveHistory->MaxLeave-$leaveHistory->LeaveCount >=0.5)
+                    if($model->Type<=2){
+                        $model->save();
+                        return print_r("['success']"); 
+                    }
+                throw new NotFoundHttpException("Can't Make");
             }
             return $this->renderAjax('create', [
                 'model' => $model,
+                'employeeModel'=>$employeeModel,
             ]);
         }
         else{
@@ -114,16 +122,38 @@ class LeaveRequestController extends Controller
     {
         $_model=$this->findModel($id);
         if($_model){
-            $model=new AttendanceIn;
+            if(!$model=AttendanceIn::findIdentityByUniqueKeys($_model->RaisedEmpId,$_model->Date))
+                $model=new AttendanceIn();
+            if(!$leaveHistoryModel=LeaveHistory::findOne(['EmployeeId'=>$_model->RaisedEmpId])){
+                $leaveHistoryModel= new LeaveHistory();
+                $leaveHistoryModel->EmployeeId=$_model->RaisedEmpId;
+                $leaveHistoryModel->LeaveType=$_model->Duration;
+                $leaveHistoryModel->MaxLeave=\app\models\LeaveCategory::findOne(['id'=>$_model->Duration])->LeaveCount;
+            }
             $model->EmployeeId=$_model->RaisedEmpId;
             $model->Date=$_model->Date;
-            $model->Time="null";
-            $model->OutTime="null";
+            $model->Time=NULL;
+            $model->OutTime=NULL;
+            if($_model->Duration==1)
+                $model->FirstHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
+            else if($_model->Duration==2)
+                $model->SecondHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
+            else if($_model->Duration==3){
+                $model->FirstHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
+                $model->SecondHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
+            }
+            if($_model->Type<=2){
+                if($_model->Duration<=2)
+                    $leaveHistoryModel->LeaveCount+=0.5;
+                else
+                    $leaveHistoryModel->LeaveCount+=1.0;
+            }
             $_model->Resolved=1;
-            if($model->save()&&$_model->save())
+            if($leaveHistoryModel->save() && $model->save() && $_model->save())
                 return $this->redirect(['index']);     
         }
-        throw new NotFoundHttpException('Some Issue, Fixing it.');
+        
+       throw new NotFoundHttpException('Some Issue, Fixing it.');
     }
 
     /**

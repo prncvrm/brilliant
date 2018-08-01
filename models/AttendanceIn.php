@@ -30,7 +30,7 @@ class AttendanceIn extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['EmployeeId', 'Date', 'Time'], 'required'],
+            [['EmployeeId', 'Date'], 'required'],
             [['EmployeeId'], 'integer'],
             [['Date', 'Time'], 'safe'],
         ];

@@ -11,8 +11,8 @@ use yii\filters\VerbFilter;
 use app\models\AttendanceIn;
 use yii\filters\AccessControl;
 use app\models\Users;
-
-
+use app\models\TimeSlots;
+use app\models\Employee;
 /**
  * ChangeRequestController implements the CRUD actions for ChangeRequest model.
  */
@@ -165,6 +165,32 @@ class ChangeRequestController extends Controller
         $model->Time=$_model->NewInTime;
         $model->OutTime=$_model->NewOutTime;
         $_model->Resolved=1;
+        $employeeModel=Employee::findOne($_model->RaisedEmpCode);
+        $timeSlotModel=TimeSlots::findOne(['id'=>$employeeModel->TimeSlot]);
+        if(strcmp($model->Time,$timeSlotModel->Grace)<0){
+            if($employeeModel->DeadOutCount>0)
+            {
+                $employeeModel->DeadOutCount-=1;
+                $employeeModel->save();
+            }
+            if($employeeModel->DeadOutCount==0)
+                $model->Remark="";
+            $model->FirstHalf="P";
+        }
+        else if (strcmp($model->Time,$timeSlotModel->Grace)>0 && strcmp($model->Time,$timeSlotModel->DeadOut)<0){
+            $employeeModel->DeadOutCount+=1;
+            $employeeModel->save();
+            $model->Remark=$employeeModel->DeadOutCount." Late Count";
+            $model->FirstHalf="P";
+        }
+        else{
+            $model->FirstHalf="A";
+        }
+        if(strcmp($model->OutTime,$timeSlotModel->OutTime)<0)
+                $model->SecondHalf="A";
+        else
+                $model->SecondHalf="P";
+
         if($model->save()&&$_model->save())
             return $this->redirect(['index']); 
         //print_r($model);
@@ -213,3 +239,4 @@ class ChangeRequestController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }
+

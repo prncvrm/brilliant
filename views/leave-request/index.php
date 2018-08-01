@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'value'=>function($model){
                 return app\models\LeaveCategory::findAll(['id'=>$model->Type])[0]['Name'];
             }],
+            'Duration',
             ['attribute'=>'Resolved',
             'value'=>function($model){
                 switch($model->Resolved){
@@ -45,7 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             }
             ],
-
              ['class' => 'yii\grid\ActionColumn',
             'template'=>'{approve} {delete}',
             'buttons'=>[

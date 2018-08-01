@@ -30,26 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $total_minutes=$total_minutes+(60*($timeOut[0]-$timeIn[0]))+abs($timeOut[1]-$timeIn[1]);
         return (String)add_zero($timeOut[0]-$timeIn[0]).":".(String)add_zero(abs($timeOut[1]-$timeIn[1])).":".(String)add_zero(abs($timeOut[2]-$timeIn[2]));
     }
-   
-    function atten_value($attendance_criteria,$emp_time_slot_id,$in_time,$out_time){
-      global $grace_counts;
-      if($in_time=="00:00:00" || $out_time=="00:00:00"){
-        return "Absent";
-      }
-      if(strcmp($in_time,$attendance_criteria[$emp_time_slot_id]['Grace'])<0)
-        return "Present";
-      else if(strcmp($in_time,$attendance_criteria[$emp_time_slot_id]['Grace'])>0 && strcmp($in_time,$attendance_criteria[$emp_time_slot_id]['DeadOut'])<0){
-          $grace_counts++;
-        if($grace_counts<=$attendance_criteria[$emp_time_slot_id]['MaxDeadOutCount'])
-          return "Present:(".$grace_counts." Late Count)";
-        else
-          return "Half Day";
-      }
-        else
-          return "Half Day";
-      }
-    
-    
+       
     ?>
     <div class="row">
         <div class="col-md-9">
@@ -65,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
     <th>Attendance</th>
+
     <th>Change/Request</th>
     <th>Request Leave</th>
   </tr>
@@ -129,10 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <td style="color:green;font-size: 16px">
          <?php
    if(isset($present_days[$date]))
-    if(isset($present_days[$date]["OutTime"])){
-      echo atten_value($attendance_criteria,Employee::findAll(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])[0]['TimeSlot'] ,$present_days[$date]["InTime"],$present_days[$date]["OutTime"]);
-      }
-
+    echo $present_days[$date]['Attendance']." ".$present_days[$date]['Remark'];
     ?>
     </td>
     <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ 
