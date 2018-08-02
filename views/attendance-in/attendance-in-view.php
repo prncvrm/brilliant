@@ -46,8 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
     <th>Attendance</th>
-
+    <?php if(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m') ||(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m')-1 && date('d') <=05)){?>
     <th>Change/Request</th>
+  <?php }?>
     <th>Request Leave</th>
   </tr>
   <?php for($i=1;$i<=$no_days;++$i){
@@ -114,6 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
     echo $present_days[$date]['Attendance']." ".$present_days[$date]['Remark'];
     ?>
     </td>
+    <?php if(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m') ||(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m')-1 && date('d') <=05)){?>
     <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ 
         if(isset($present_days[$date]['Resolved'])){
           if($present_days[$date]['Resolved']==0){
@@ -146,6 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
         }
       ?>
     </td>
+  <?php }?>
     <td>
       <?php if(array_key_exists($date,$leave_record)){
           if($leave_record[$date]==0){
@@ -178,8 +181,14 @@ $this->params['breadcrumbs'][] = $this->title;
 </table>
 </div>
 <div class="col-md-3" style="font-size:18px;">
-    <p><b>Present Days :</b> <?php echo count($present_days);
-        ?></p>
+    <p><b>Present Days :</b> <?php echo count($present_days);?></p>
+    <?php
+    if(Yii::$app->request->queryParams['AttendanceInSearch']["Month"]==date('m')){ 
+    $leaveHisModel=app\models\LeaveHistory::findOne(['EmployeeId'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]]);
+    echo ("<p><b>Total Paid Leave Available </b>".$leaveHisModel->MaxLeave."</p>");
+    echo ("<p><b>Paid Leave Consumed/Requested </b>".$leaveHisModel->LeaveCount."</p>");
+  }
+    ?>
 </div>
 </div>
 
