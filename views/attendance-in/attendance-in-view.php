@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
     <th>Attendance</th>
-    <?php if(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m') ||(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m')-1 && date('d') <=05)){?>
+    <?php if((add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m') ||(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m')-1 && date('d') <=05)) || Yii::$app->user->identity->AccessLevel == app\models\Users::ROLE_ADMIN){?>
     <th>Change/Request</th>
   <?php }?>
     <th>Request Leave</th>
@@ -115,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
     echo $present_days[$date]['Attendance']." ".$present_days[$date]['Remark'];
     ?>
     </td>
-    <?php if(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m') ||(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m')-1 && date('d') <=05)){?>
+    <?php if((add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m') ||(add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])>= date('m')-1 && date('d') <=05)) || Yii::$app->user->identity->AccessLevel == app\models\Users::ROLE_ADMIN){?>
     <td><?php if(isset($present_days[$date]) && isset($present_days[$date]['OutTime'])){ 
         if(isset($present_days[$date]['Resolved'])){
           if($present_days[$date]['Resolved']==0){
