@@ -83,7 +83,6 @@
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Create Employee(Temp)', 'icon' => 'circle-o', 'url' => ['/employee/create'],],
                             ['label' => 'Employee Attendance', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
                             
                         ],
@@ -94,6 +93,7 @@
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
+                            ['label' => 'Create Employee(Temp)', 'icon' => 'circle-o', 'url' => ['/employee/create'],],
                             
                             ['label' => 'Employee Attendance', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
                             ['label' => 'Month Off', 'icon' => 'circle-o', 'url' => ['/month-off/index'],],

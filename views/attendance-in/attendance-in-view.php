@@ -162,7 +162,7 @@ $this->params['breadcrumbs'][] = $this->title;
       else
       {
         ?>
-        <button class="request btn btn-success" href="<?=Yii::$app->homeUrl?>leave-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&Date=<?=$date?>"><small><small>Leave Accepted</small></small></button>
+        <button class="request btn btn-success" href="<?=Yii::$app->homeUrl?>leave-request/create?EmpCode=<?=Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]?>&Date=<?=$date?>"><small><small>Leave Resolved</small></small></button>
         <?php
       }
       }

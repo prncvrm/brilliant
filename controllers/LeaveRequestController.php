@@ -100,13 +100,29 @@ class LeaveRequestController extends Controller
                 $model->Resolved=0;    
             }
             $employeeModel=Employee::findOne($EmpCode);
-            $leaveHistory=LeaveHistory::findOne(["EmployeeId"=>$EmpCode]);
+            //$leaveHistory=LeaveHistory::findOne(["EmployeeId"=>$EmpCode]);
             if ($model->load(Yii::$app->request->post())) {
-                if($leaveHistory->MaxLeave-$leaveHistory->LeaveCount >=0.5)
+            if(!$leaveHistoryModel=LeaveHistory::findOne(['EmployeeId'=>$EmpCode])){
+                $leaveHistoryModel= new LeaveHistory();
+                $leaveHistoryModel->EmployeeId=$model->RaisedEmpId;
+                $leaveHistoryModel->LeaveType=$model->Type;
+                $leaveHistoryModel->MaxLeave=\app\models\LeaveCategory::findOne(['id'=>$model->Type])->LeaveCount;
+            }
+            
+            if($model->Type<=2){
+                if($model->Duration<=2)
+                    $leaveHistoryModel->LeaveCount+=0.5;
+                else
+                    $leaveHistoryModel->LeaveCount+=1.0;
+            }
+            
+                if($leaveHistoryModel->MaxLeave-$leaveHistoryModel->LeaveCount >=0.0)
                     if($model->Type<=2){
+                        $leaveHistoryModel->save();
                         $model->save();
                         return print_r("['success']"); 
                     }
+                    
                 throw new NotFoundHttpException("Can't Make");
             }
             return $this->renderAjax('create', [
@@ -124,16 +140,10 @@ class LeaveRequestController extends Controller
         if($_model){
             if(!$model=AttendanceIn::findIdentityByUniqueKeys($_model->RaisedEmpId,$_model->Date))
                 $model=new AttendanceIn();
-            if(!$leaveHistoryModel=LeaveHistory::findOne(['EmployeeId'=>$_model->RaisedEmpId])){
-                $leaveHistoryModel= new LeaveHistory();
-                $leaveHistoryModel->EmployeeId=$_model->RaisedEmpId;
-                $leaveHistoryModel->LeaveType=$_model->Duration;
-                $leaveHistoryModel->MaxLeave=\app\models\LeaveCategory::findOne(['id'=>$_model->Duration])->LeaveCount;
-            }
             $model->EmployeeId=$_model->RaisedEmpId;
             $model->Date=$_model->Date;
-            $model->Time=NULL;
-            $model->OutTime=NULL;
+            /*$model->Time=NULL;
+            $model->OutTime=NULL;*/
             if($_model->Duration==1)
                 $model->FirstHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
             else if($_model->Duration==2)
@@ -142,14 +152,9 @@ class LeaveRequestController extends Controller
                 $model->FirstHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
                 $model->SecondHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
             }
-            if($_model->Type<=2){
-                if($_model->Duration<=2)
-                    $leaveHistoryModel->LeaveCount+=0.5;
-                else
-                    $leaveHistoryModel->LeaveCount+=1.0;
-            }
+            
             $_model->Resolved=1;
-            if($leaveHistoryModel->save() && $model->save() && $_model->save())
+            if($model->save() && $_model->save())
                 return $this->redirect(['index']);     
         }
         
@@ -190,7 +195,12 @@ class LeaveRequestController extends Controller
             return $this->redirect(['index']);
         $_model->Resolved=1;
         $_model->Reason=$_model->Reason."(Rejected)";
-        if($_model->save())    
+        $leaveHistoryModel=LeaveHistory::findOne(['EmployeeId'=>$_model->RaisedEmpId]);
+        if($_model->Duration<=2)
+            $leaveHistoryModel->LeaveCount-=0.5;
+        else
+            $leaveHistoryModel->LeaveCount-=1.0;
+        if($_model->save() && $leaveHistoryModel->save())    
             return $this->redirect(['index']);
         throw new NotFoundHttpException('Some Issue, Fixing it.');
     }

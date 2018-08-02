@@ -105,6 +105,10 @@ class AttendanceInController extends Controller
         $employeeModel=Employee::findIdentityByMacAddress($mac);
         
         if($employeeModel!=null){
+            if ($employeeModel->Active==0){
+                print_r ("InActive Employee.. Contact Admin");
+                return;
+            }
             $model = new AttendanceIn();
             date_default_timezone_set('Asia/Calcutta');
             $model=AttendanceIn::findIdentityByUniqueKeys($employeeModel->id,date("Y-m-d"));
@@ -162,21 +166,26 @@ class AttendanceInController extends Controller
                 print_r("<h1><p style='color:red;background-color:pink;border-color:#c3e6cb;'>No In Attendance Marked For the Day. Please Ask Admin, to update it if you have missed it.</p></h1>");
                 return;
             }
-            $model->OutTime=date("H:i:s");
-            $timeSlotModel=TimeSlots::findOne(['id'=>$employeeModel->TimeSlot]);
-            if(strcmp($model->OutTime,$timeSlotModel->OutTime)<0)
-                $model->SecondHalf="A";
-            else
-                $model->SecondHalf="P";
-            if($model->validate() && $model->save()){
-            return $this->renderPartial('attendance-out-success', [
-                    'employeeModel'=>$employeeModel,
-                    'model'=>$model,
-                ]);
+            if($model->SecondHalf==null || $model->SecondHalf=="P" || $model->SecondHalf=="A"){
+                $model->OutTime=date("H:i:s");
+                $timeSlotModel=TimeSlots::findOne(['id'=>$employeeModel->TimeSlot]);
+                if(strcmp($model->OutTime,$timeSlotModel->OutTime)<0)
+                    $model->SecondHalf="A";
+                else
+                    $model->SecondHalf="P";
+                if($model->validate() && $model->save()){
+                return $this->renderPartial('attendance-out-success', [
+                        'employeeModel'=>$employeeModel,
+                        'model'=>$model,
+                    ]);
+                }
+                else{
+                    print_r("Error Occured");
+                        return;
+                }
             }
             else{
-                print_r("Error Occured");
-                    return;
+                print_r("You Had taken leave for Second Half");
             }
         }
        else{
@@ -212,7 +221,7 @@ class AttendanceInController extends Controller
             $attendance_criteria[$ac['id']]=['InTime'=>$ac['InTime'],'OutTime'=>$ac['OutTime'],'Grace'=>$ac['Grace'],'DeadOut'=>$ac['DeadOut'],'MaxDeadOutCount'=>$ac['MaxDeadOutCount']];
         }*/
         $leave_record=[];
-        foreach(LeaveRequest::find()->all() as $lq){
+        foreach(LeaveRequest::find()->where(['RaisedEmpId'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->andWhere(['and','Date>='.'"'.$start.'"','Date<='.'"'.$end.'"'])->all() as $lq){
             $leave_record[$lq['Date']]=$lq['Resolved'];
         }
         $month_off=MonthOff::find()->select(["Dates"])->where(['BranchId'=>29])->andWhere(['Month'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])])->andWhere(['Year'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Year"])])->all();

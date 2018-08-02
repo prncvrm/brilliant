@@ -29,7 +29,7 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['EmployeeCode', 'EmployeeName', 'DeviceName', 'MacAddress','Branch','Designation'], 'required'],
+            [['EmployeeCode', 'EmployeeName', 'Branch','Designation','TimeSlot','LeaveType'], 'required'],
             [['EmployeeCode'], 'string', 'max' => 10],
             [['EmployeeName', 'DeviceName'], 'string', 'max' => 255],
             [['MacAddress'], 'string', 'max' => 17],

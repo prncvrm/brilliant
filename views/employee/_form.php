@@ -62,6 +62,20 @@ else{
 </div><div class="col-md-4">
     <?= $form->field($model, 'MacAddress')->textInput(['maxlength' => true]) ?>
 </div></div>
+<div class="row">
+  <div class="col-md-4">
+    <?= $form->field($model, 'TimeSlot')->dropDownList(
+      yii\helpers\ArrayHelper::map(app\models\TimeSlots::find()->all(),'id','InTime'),
+      ['prompt'=>'Select In Time']
+    ) ?>
+  </div>
+  <div class="col-md-4">
+    <?= $form->field($model, 'LeaveType')->dropDownList(
+      yii\helpers\ArrayHelper::map(app\models\LeaveCategory::find(['<=','id',2])->all(),'id','Name'),
+      ['prompt'=>'Select Paid Leave Type ']
+    ) ?>
+  </div>
+</div>
 
     <div class="form-group">
         <?= Html::submitButton('Register', ['class' => 'btn btn-success']) ?>

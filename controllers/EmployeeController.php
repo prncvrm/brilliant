@@ -26,8 +26,16 @@ class EmployeeController extends Controller
                 'ruleConfig'=>[
                     'class'=>\app\components\AccessRule::className(),
                 ],
-                'only' => ['index','create', 'update', 'delete','reverse-index','approve','reverse'],
+                'only' => ['index','create', 'update', 'delete','reverse-index','approve','reverse','switch-active'],
                 'rules' => [
+                    [
+                        'actions' => ['switch-active'],
+                           'allow' => true,
+                           // Allow users, moderators and admins to create
+                           'roles' => [
+                               Users::ROLE_ADMIN,
+                           ],
+                    ],
                     [
                         'actions' => ['index','create', 'update', 'delete',],
                            'allow' => true,
@@ -38,7 +46,7 @@ class EmployeeController extends Controller
                            ],
                     ],
                     [
-                        'actions' => ['index','view','create'],
+                        'actions' => ['index','view','create','update'],
                            'allow' => true,
                            // Allow users, moderators and admins to create
                            'roles' => [
@@ -92,7 +100,8 @@ class EmployeeController extends Controller
     public function actionCreate()
     {
         $model = new Employee();
-
+        $model->Active=1;
+        $model->DeadOutCount=0;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
@@ -133,6 +142,13 @@ class EmployeeController extends Controller
     {
         $this->findModel($id)->delete();
 
+        return $this->redirect(['index']);
+    }
+
+    public function actionSwitchActive($id){
+        $model=$this->findModel($id);
+        $model->Active=($model->Active==0)?1:0;
+        $model->save();
         return $this->redirect(['index']);
     }
 

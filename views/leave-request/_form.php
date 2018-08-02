@@ -76,7 +76,7 @@ $js=<<< JS
             alert('Leave Request Submitted');
         },
         error: function () {
-            alert("You have used your Paid Leave");
+            alert("You have used your Paid Leaves");
         }
     })
 }).on('submit',function(e){
