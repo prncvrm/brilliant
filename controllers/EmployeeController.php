@@ -72,7 +72,7 @@ class EmployeeController extends Controller
     {
         $searchModel = new EmployeeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        (Yii::$app->user->identity->AccessLevel > Users::ROLE_ADMIN)?$dataProvider->query->andWhere(['Active'=>1]):"";
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -102,7 +102,12 @@ class EmployeeController extends Controller
         $model = new Employee();
         $model->Active=1;
         $model->DeadOutCount=0;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->DeviceName=="")
+                $model->DeviceName=null;
+            if($model->MacAddress=="")
+                $model->MacAddress=null;
+            $model->save();
             return $this->redirect(['index']);
         }
 

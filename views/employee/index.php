@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
-   <?php print_r(app\models\LeaveCategory::findOne(['id'=>1])->Name);?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         
@@ -57,6 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return TimeSlots::findAll(['id'=>$model->TimeSlot])[0]['InTime']." - ".TimeSlots::findAll(['id'=>$model->TimeSlot])[0]['OutTime'];
             }],
             ['attribute'=>'Active',
+            'visible'=>Yii::$app->user->identity->AccessLevel<=app\models\Users::ROLE_ADMIN,
             'value'=>function($model){
                 switch($model->Active){
                     case 0:
