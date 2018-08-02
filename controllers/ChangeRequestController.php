@@ -38,6 +38,7 @@ class ChangeRequestController extends Controller
                            'roles' => [
                                Users::ROLE_ADMIN,
                                Users::ROLE_MODERATOR,
+                               Users::ROLE_USER,
                            ],
                     ],
                     [

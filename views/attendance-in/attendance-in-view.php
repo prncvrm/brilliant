@@ -185,9 +185,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if(Yii::$app->request->queryParams['AttendanceInSearch']["Month"]==date('m')){ 
     $leaveHisModel=app\models\LeaveHistory::findOne(['EmployeeId'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]]);
+    if($leaveHisModel){
     echo ("<p><b>Total Paid Leave Available </b>".$leaveHisModel->MaxLeave."</p>");
     echo ("<p><b>Paid Leave Consumed/Requested </b>".$leaveHisModel->LeaveCount."</p>");
-  }
+    }
+    }
     ?>
 </div>
 </div>
