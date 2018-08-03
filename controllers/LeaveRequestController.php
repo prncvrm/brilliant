@@ -103,14 +103,14 @@ class LeaveRequestController extends Controller
             $employeeModel=Employee::findOne($EmpCode);
             //$leaveHistory=LeaveHistory::findOne(["EmployeeId"=>$EmpCode]);
             if ($model->load(Yii::$app->request->post())) {
-            if(!$leaveHistoryModel=LeaveHistory::findOne(['EmployeeId'=>$EmpCode])){
+            if(!$leaveHistoryModel=LeaveHistory::findOne(['EmployeeId'=>$EmpCode,'LeaveType'=>$model->Type])){
                 $leaveHistoryModel= new LeaveHistory();
                 $leaveHistoryModel->EmployeeId=$model->RaisedEmpId;
                 $leaveHistoryModel->LeaveType=$model->Type;
                 $leaveHistoryModel->MaxLeave=\app\models\LeaveCategory::findOne(['id'=>$model->Type])->LeaveCount;
             }
             
-            if($model->Type<=2){
+            if($model->Type<=2 || $model->Type==4){
                 if($model->Duration<=2)
                     $leaveHistoryModel->LeaveCount+=0.5;
                 else
@@ -118,7 +118,7 @@ class LeaveRequestController extends Controller
             }
             
                 if($leaveHistoryModel->MaxLeave-$leaveHistoryModel->LeaveCount >=0.0)
-                    if($model->Type<=2){
+                    if($model->Type<=2 || $model->Type==4){
                         $leaveHistoryModel->save();
                         $model->save();
                         return print_r("['success']"); 
@@ -146,12 +146,12 @@ class LeaveRequestController extends Controller
             /*$model->Time=NULL;
             $model->OutTime=NULL;*/
             if($_model->Duration==1)
-                $model->FirstHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
+                $model->FirstHalf=($_model->Type==4)?"WL":(($_model->Type<=2)?(($_model->Type==1)?"TL":"CL"):"NPL");
             else if($_model->Duration==2)
-                $model->SecondHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
+                $model->SecondHalf=($_model->Type==4)?"WL":(($_model->Type<=2)?(($_model->Type==1)?"TL":"CL"):"NPL");
             else if($_model->Duration==3){
-                $model->FirstHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
-                $model->SecondHalf=($_model->Type<=2)?($_model->Type==1)?"TL":"CL":"NPL";
+                $model->FirstHalf=($_model->Type==4)?"WL":(($_model->Type<=2)?(($_model->Type==1)?"TL":"CL"):"NPL");
+                $model->SecondHalf=($_model->Type==4)?"WL":(($_model->Type<=2)?(($_model->Type==1)?"TL":"CL"):"NPL");
             }
             
             $_model->Resolved=1;

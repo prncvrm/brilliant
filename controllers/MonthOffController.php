@@ -86,10 +86,17 @@ class MonthOffController extends Controller
     {
         $model = new MonthOff();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            foreach ($model->BranchId as $bi){
+                $_model= new MonthOff();
+                $_model->BranchId=$bi;
+                $_model->Month=$model->Month;
+                $_model->Year=$model->Year;
+                $_model->Dates=$model->Dates;
+                $_model->save();
+            }
             return $this->redirect(['index']);
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);

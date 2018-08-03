@@ -51,8 +51,10 @@ $this->params['breadcrumbs'][] = $this->title;
   <?php }?>
     <th>Request Leave</th>
   </tr>
+ 
   <?php for($i=1;$i<=$no_days;++$i){
-    if(in_array($i, $month_off)){
+    $date=Yii::$app->request->queryParams['AttendanceInSearch']["Year"]."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-".add_zero($i);
+    if(!array_key_exists($date, $present_days) && in_array($i, $month_off)){
       ?>
       <tr>
 <td><?=add_zero($i)."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-".Yii::$app->request->queryParams['AttendanceInSearch']["Year"]?></td>
@@ -63,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
   <tr>
     <td><?=add_zero($i)."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-".Yii::$app->request->queryParams['AttendanceInSearch']["Year"]?></td>
     <?php
-    $date=Yii::$app->request->queryParams['AttendanceInSearch']["Year"]."-".add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])."-".add_zero($i);
+    
     if(array_key_exists($date,$present_days)){
       if($present_days[$date]["InTime"]=="00:00:00"){
     ?>

@@ -16,8 +16,18 @@ use app\models\LeaveCategory;
             <?php if(!$model->Resolved){?>
     <?=$form->field($model,'Date')->textInput(['disabled'=>true]) ?>
     	</div><div class="col-md-4">
+    <?php 
+    if($compLeave = app\models\LeaveHistory::findOne(['EmployeeId'=>$employeeModel->id,'LeaveType'=>4])){
+        if($compLeave->MaxLeave -$compLeave->LeaveCount> 0.0)
+            $CompLeave=array(4=>'Week Comp');
+        else
+            $CompLeave=[];
+    }
+    else
+        $CompLeave=[];
+    ?>
   <?= $form->field($model, 'Type')->dropDownList(
-        yii\helpers\ArrayHelper::map(LeaveCategory::find()->where(['id'=>$employeeModel->LeaveType])->all(),'id','Name')+yii\helpers\ArrayHelper::map(LeaveCategory::find()->where(['>','id',2])->all(),'id','Name'),
+        yii\helpers\ArrayHelper::map(LeaveCategory::find()->where(['id'=>$employeeModel->LeaveType])->all(),'id','Name')+yii\helpers\ArrayHelper::map(LeaveCategory::find()->where(['=','id',3])->all(),'id','Name')+$CompLeave,
         ['prompt'=>'Select Type']
     ) ?>
 </div>
@@ -76,7 +86,7 @@ $js=<<< JS
             alert('Leave Request Submitted');
         },
         error: function () {
-            alert("You have used your Paid Leaves");
+            alert("You have used your Paid/WeekOff Leave");
         }
     })
 }).on('submit',function(e){

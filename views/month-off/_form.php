@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
     	<div class='col-md-4'>
     		<?= $form->field($model, 'BranchId')->dropDownList(
     		ArrayHelper::map(Branch::find()->all(),'id','value'),
-        	['prompt'=>'Select Branch']
+        	['class'=>'mul-branch form-control','multiple'=>'multiple','placeholder'=>'Select Branches']
     		) ?>
     	</div>
     	<div class='col-md-4'>
@@ -39,11 +39,12 @@ use yii\helpers\ArrayHelper;
 	    	<?= $form->field($model, 'Dates')->textInput(['maxlength' => true]) ?>
     	</div>
     </div>
-    
-
-
-    
-
+<?php 
+$this->registerJs(<<< EOT_JS_CODE
+    $('.mul-branch').select2();
+EOT_JS_CODE
+);
+?>
     
 
     <div class="form-group">

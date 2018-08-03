@@ -13,6 +13,7 @@ use yii\filters\AccessControl;
 use app\models\Users;
 use app\models\TimeSlots;
 use app\models\Employee;
+use app\models\MonthOff;
 /**
  * ChangeRequestController implements the CRUD actions for ChangeRequest model.
  */
@@ -168,6 +169,10 @@ class ChangeRequestController extends Controller
         $_model->Resolved=1;
         $employeeModel=Employee::findOne($_model->RaisedEmpCode);
         $timeSlotModel=TimeSlots::findOne(['id'=>$employeeModel->TimeSlot]);
+        $__date=explode('-',$_model->Date);
+        $month_off=MonthOff::find()->select(["Dates"])->where(['BranchId'=>$employeeModel->Branch])->andWhere(['Month'=>$__date[1]])->andWhere(['Year'=>$__date[0]])->all();
+        if($month_off)
+            $month_off=array_map('intval',explode(',',$month_off[0]['Dates'],-1));
         if(strcmp($model->Time,$timeSlotModel->Grace)<0){
             if($employeeModel->DeadOutCount>0)
             {
@@ -176,21 +181,67 @@ class ChangeRequestController extends Controller
             }
             if($employeeModel->DeadOutCount==0)
                 $model->Remark="";
-            $model->FirstHalf="P";
+            if(in_array($__date[2], $month_off)){
+                        if(!$leaveHistory=LeaveHistory::findOne(['EmployeeId'=>$employeeModel->id, 'LeaveType'=>4])){
+                            $leaveHistory =new LeaveHistory();
+                            $leaveHistory->id=$employeeModel->id;
+                            $leaveHistory->Type=4;
+                            $leaveHistory->LeaveCount=0;
+                            $leaveHistory->MaxLeave=0.5;
+                        }
+                        else{
+                            $leaveHistory->MaxLeave+=0.5;
+                        }
+                        $leaveHistory->save();
+                        $model->FirstHalf="WP";
+                    }
+                    else
+                        $model->FirstHalf="P";
         }
         else if (strcmp($model->Time,$timeSlotModel->Grace)>0 && strcmp($model->Time,$timeSlotModel->DeadOut)<0){
             $employeeModel->DeadOutCount+=1;
             $employeeModel->save();
             $model->Remark=$employeeModel->DeadOutCount." Late Count";
-            $model->FirstHalf="P";
+            if(in_array($__date[2], $month_off)){
+                        if(!$leaveHistory=LeaveHistory::findOne(['EmployeeId'=>$employeeModel->id, 'LeaveType'=>4])){
+                            $leaveHistory =new LeaveHistory();
+                            $leaveHistory->id=$employeeModel->id;
+                            $leaveHistory->Type=4;
+                            $leaveHistory->LeaveCount=0;
+                            $leaveHistory->MaxLeave=0.5;
+                        }
+                        else{
+                            $leaveHistory->MaxLeave+=0.5;
+                        }
+                        $leaveHistory->save();
+                        $model->FirstHalf="WP";
+                    }
+                    else
+                        $model->FirstHalf="P";
         }
         else{
             $model->FirstHalf="A";
         }
         if(strcmp($model->OutTime,$timeSlotModel->OutTime)<0)
                 $model->SecondHalf="A";
-        else
-                $model->SecondHalf="P";
+        else{
+            if(in_array($__date[2], $month_off)){
+                        if(!$leaveHistory=LeaveHistory::findOne(['EmployeeId'=>$employeeModel->id, 'LeaveType'=>4])){
+                            $leaveHistory =new LeaveHistory();
+                            $leaveHistory->id=$employeeModel->id;
+                            $leaveHistory->Type=4;
+                            $leaveHistory->LeaveCount=0;
+                            $leaveHistory->MaxLeave=0.5;
+                        }
+                        else{
+                            $leaveHistory->MaxLeave+=0.5;
+                        }
+                        $leaveHistory->save();
+                        $model->FirstHalf="WP";
+                    }
+                    else
+                        $model->SecondHalf="P";
+        }
 
         if($model->save()&&$_model->save())
             return $this->redirect(['index']); 

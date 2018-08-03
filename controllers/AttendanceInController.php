@@ -112,14 +112,34 @@ class AttendanceInController extends Controller
             $model = new AttendanceIn();
             date_default_timezone_set('Asia/Calcutta');
             $model=AttendanceIn::findIdentityByUniqueKeys($employeeModel->id,date("Y-m-d"));
+            $month_off=MonthOff::find()->select(["Dates"])->where(['BranchId'=>$employeeModel->Branch])->andWhere(['Month'=>date('m')])->andWhere(['Year'=>date("Y")])->all();
+            if($month_off)
+                $month_off=array_map('intval',explode(',',$month_off[0]['Dates'],-1));
             if($model==null){
                 $model= new AttendanceIn();
                 $model->EmployeeId=$employeeModel->id;
                 $model->Date=date("Y-m-d");
                 $model->Time=date("H:i:s");
                 $timeSlotModel=TimeSlots::findOne(['id'=>$employeeModel->TimeSlot]);
-                if(strcmp($model->Time,$timeSlotModel->Grace)<0)
-                    $model->FirstHalf="P";
+                if(strcmp($model->Time,$timeSlotModel->Grace)<0){
+                    if(in_array(date('d'), $month_off)){
+                        if(!$leaveHistory=LeaveHistory::findOne(['EmployeeId'=>$employeeModel->id, 'LeaveType'=>4])){
+                            $leaveHistory =new LeaveHistory();
+                            $leaveHistory->id=$employeeModel->id;
+                            $leaveHistory->Type=4;
+                            $leaveHistory->LeaveCount=0;
+                            $leaveHistory->MaxLeave=0.5;
+                        }
+                        else{
+                            $leaveHistory->MaxLeave+=0.5;
+                        }
+                        $leaveHistory->save();
+                        $model->FirstHalf="WP";
+                    }
+                    else
+                        $model->FirstHalf="P";
+                    
+                }
                 else if (strcmp($model->Time,$timeSlotModel->Grace)>0 && strcmp($model->Time,$timeSlotModel->DeadOut)<0){
                         if($employeeModel->DeadOutCount>=$timeSlotModel->MaxDeadOutCount)
                             $model->FirstHalf="A";
@@ -127,7 +147,22 @@ class AttendanceInController extends Controller
                             $employeeModel->DeadOutCount+=1;
                             $employeeModel->save();
                             $model->Remark=$employeeModel->DeadOutCount." Late Count";
-                            $model->FirstHalf="P";
+                            if(in_array(date('d'), $month_off)){
+                                if(!$leaveHistory=LeaveHistory::findOne(['EmployeeId'=>$employeeModel->id, 'LeaveType'=>4])){
+                                    $leaveHistory =new LeaveHistory();
+                                    $leaveHistory->id=$employeeModel->id;
+                                    $leaveHistory->Type=4;
+                                    $leaveHistory->LeaveCount=0;
+                                    $leaveHistory->MaxLeave=0.5;
+                                }
+                                else{
+                                    $leaveHistory->MaxLeave+=0.5;
+                                }
+                                $leaveHistory->save();
+                                $model->FirstHalf="WP";
+                                }
+                            else
+                                $model->FirstHalf="P";
                         }
                 }
                 else{
@@ -162,6 +197,9 @@ class AttendanceInController extends Controller
             $model = new AttendanceIn();
             date_default_timezone_set('Asia/Calcutta');
             $model=AttendanceIn::findIdentityByUniqueKeys($employeeModel->id,date("Y-m-d"));
+            $month_off=MonthOff::find()->select(["Dates"])->where(['BranchId'=>$employeeModel->Branch])->andWhere(['Month'=>date('m')])->andWhere(['Year'=>date("Y")])->all();
+            if($month_off)
+                $month_off=array_map('intval',explode(',',$month_off[0]['Dates'],-1));
             if($model==null){
                 print_r("<h1><p style='color:red;background-color:pink;border-color:#c3e6cb;'>No In Attendance Marked For the Day. Please Ask Admin, to update it if you have missed it.</p></h1>");
                 return;
@@ -171,8 +209,24 @@ class AttendanceInController extends Controller
                 $timeSlotModel=TimeSlots::findOne(['id'=>$employeeModel->TimeSlot]);
                 if(strcmp($model->OutTime,$timeSlotModel->OutTime)<0)
                     $model->SecondHalf="A";
-                else
-                    $model->SecondHalf="P";
+                else{
+                    if(in_array(date('d'), $month_off)){
+                        if(!$leaveHistory=LeaveHistory::findOne(['EmployeeId'=>$employeeModel->id, 'LeaveType'=>4])){
+                            $leaveHistory =new LeaveHistory();
+                            $leaveHistory->id=$employeeModel->id;
+                            $leaveHistory->Type=4;
+                            $leaveHistory->LeaveCount=0;
+                            $leaveHistory->MaxLeave=0.5;
+                        }
+                        else{
+                            $leaveHistory->MaxLeave+=0.5;
+                        }
+                        $leaveHistory->save();
+                        $model->FirstHalf="WP";
+                    }
+                    else
+                        $model->SecondHalf="P";
+                }
                 if($model->validate() && $model->save()){
                 return $this->renderPartial('attendance-out-success', [
                         'employeeModel'=>$employeeModel,
@@ -224,7 +278,7 @@ class AttendanceInController extends Controller
         foreach(LeaveRequest::find()->where(['RaisedEmpId'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->andWhere(['and','Date>='.'"'.$start.'"','Date<='.'"'.$end.'"'])->all() as $lq){
             $leave_record[$lq['Date']]=$lq['Resolved'];
         }
-        $month_off=MonthOff::find()->select(["Dates"])->where(['BranchId'=>29])->andWhere(['Month'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])])->andWhere(['Year'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Year"])])->all();
+        $month_off=MonthOff::find()->select(["Dates"])->where(['BranchId'=>Employee::findOne(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->Branch])->andWhere(['Month'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Month"])])->andWhere(['Year'=>add_zero(Yii::$app->request->queryParams['AttendanceInSearch']["Year"])])->all();
         if($month_off)
             $month_off=array_map('intval',explode(',',$month_off[0]['Dates'],-1));
         else
