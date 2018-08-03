@@ -32,6 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
     }
        
     ?>
+
+
     <div class="row">
         <div class="col-md-9">
     <table class="table table-striped" style="font-size:12px;">
@@ -183,6 +185,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </table>
 </div>
 <div class="col-md-3" style="font-size:18px;">
+    <p><b>Name :</b> <?=Employee::findOne(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->EmployeeName?></p>
     <p><b>Present Days :</b> <?php echo count($present_days);?></p>
     <?php
     if(Yii::$app->request->queryParams['AttendanceInSearch']["Month"]==date('m')){ 
