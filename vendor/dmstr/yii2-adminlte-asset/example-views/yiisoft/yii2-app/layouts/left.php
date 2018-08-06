@@ -38,11 +38,23 @@
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
+                            ['label' => 'Change Password', 'icon' => 'circle-o', 'url' => ['/users/change-password'],],
                             ['label' => 'User Entry', 'icon' => 'circle-o', 'url' => ['/users/index'],],
                             ['label' => 'Role Entry', 'icon' => 'circle-o', 'url' => ['/user-type/index'],],
                             ['label' => 'Role Permission', 'icon' => 'circle-o', 'url' => ['/role-assignment/index'],],
                             ['label' => 'Branch Permission', 'icon' => 'circle-o', 'url' => ['/branch-permission/index'],],
+                            ['label' => 'Allow Permission', 'icon' => 'circle-o', 'url' => ['/user-type-permission/index'],],
                             ['label' => 'Time Slots', 'icon' => 'circle-o', 'url' => ['/time-slots/index'],],
+                        ],
+                    ],
+                    [
+                        'label' => 'User Account',
+                        'visible'=>Yii::$app->user->identity->AccessLevel>app\models\Users::ROLE_ADMIN,
+                        'icon' => 'share',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Change Password', 'icon' => 'circle-o', 'url' => ['/users/change-password'],],
+                            
                         ],
                     ],
                     ['label' => 'Employee Management', 'options' => ['class' => 'header']],

@@ -46,11 +46,11 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             'id' => 'ID',
-            'UserName' => 'User Name',
-            'UserEmailId' => 'User Email ID',
-            'UserPassword' => 'User Password',
+            'UserName' => 'Name',
+            'UserEmailId' => 'User ID',
+            'UserPassword' => 'Password',
             'Employee' => 'Employee Name',
-            'UserType' => 'Role Type',
+            'UserType' => 'Designation',
             'Status'=>'Status',
             'LastLogin' =>'Last Login',
             'AccessLevel'=>'Access Level',

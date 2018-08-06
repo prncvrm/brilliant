@@ -78,6 +78,8 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            if(Yii::$app->user->identity->LastLogin==null)
+                return $this->redirect(['/users/change-password']);
             return $this->goBack();
         }
 

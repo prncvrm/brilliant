@@ -33,13 +33,9 @@ class Employee extends \yii\db\ActiveRecord
             [['EmployeeCode'], 'string', 'max' => 10],
             [['EmployeeName', 'DeviceName'], 'string', 'max' => 255],
             [['MacAddress'], 'string', 'max' => 17],
-            /*['MacAddress',function ($attribute,$params,$validator){
-                if (!in_array($this->$attribute, ['USA', 'Indonesia'])) {
-            $this->addError($attribute, 'The country must be either "USA" or "Indonesia".');
-            }
-            }],*/
+            
             ['MacAddress', 'match', 'pattern' => '/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', 'message' => 'Mac Address can be in dd-dd-dd-dd-dd-dd format.'],
-            ['EmployeeCode','match','pattern'=>'/^[A-Z]{1}\d{4}$/','message'=>'Employee Code Must be in X1234 format'],
+            ['EmployeeCode','match','pattern'=>'/^[A-Z]{1,2}[-]{0,1}\d{4}$/','message'=>'Employee Code Must be in X1234 format or XX-1234'],
         ];
     }
 

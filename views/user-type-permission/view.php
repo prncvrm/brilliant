@@ -1,37 +1,60 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\UserTypePermission */
-
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'User Type Permissions', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title="Roles Permitted";
 ?>
 <div class="user-type-permission-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'Users',
-            'UserType',
+    <div class="row">
+    
+    <div class="col-md-6">
+        <h4>Permissions Applicable</h4>
+     <?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        ['attribute'=>'Branch',
+        'value'=>function($data){
+            return app\models\Branch::findOne(['id'=>$data['Branch']])->value;
+        },
         ],
-    ]) ?>
+        ['attribute'=>'UserTye',
+        'value'=>function($data){
+            return app\models\UserType::findOne(['id'=>$data['UserType']])->value;
+        },
+        ],        
+
+        
+    ],
+    ]); ?>
+    </div>
+    <div class="col-md-6">
+        <h4>Permissions Granted</h4>
+        
+        <?= GridView::widget([
+    'dataProvider' => $dataProviderAllowed,
+        'columns' => [
+            'id',
+            ['attribute'=>'Branch',
+            'value'=>function($model){
+                return app\models\Branch::findOne(['id'=>$model->Branch])->value;
+            }],
+            ['attribute'=>'UserType',
+            'value'=>function($model){
+                return app\models\UserType::findOne(['id'=>$model->UserType])->value;
+            }],
+             ['class' => 'yii\grid\ActionColumn',
+            'template'=>'{delete}',
+        ],
+        ],        
+
+        
+    ]); ?>
+    </div>
+    <?= Html::a('Add All Permission', ['user-type-permission/add-all-applicable','user_id'=>Yii::$app->request->queryParams['user_id']], ['class'=>'btn btn-primary']) ?>
+    </div>
 
 </div>

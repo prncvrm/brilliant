@@ -41,7 +41,9 @@ class LeaveRequestSearch extends LeaveRequest
      */
     public function search($params)
     {
-        $query = LeaveRequest::find();
+        $search_query=UserTypePermission::find()->select('Branch','UserType')->where(['=','Users',Yii::$app->User->identity->id]);
+        $emp_query = Employee::find()->select(['employee.id'])->leftJoin('usertypepermission','employee.Branch=usertypepermission.Branch and employee.Designation=usertypepermission.UserType')->where(['=','usertypepermission.Users',Yii::$app->user->identity->id]);
+        $query = LeaveRequest::find()->where(['in','RaisedEmpId',$emp_query]);;
 
         // add conditions that should always apply here
 
