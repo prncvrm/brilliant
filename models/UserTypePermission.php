@@ -29,7 +29,7 @@ class UserTypePermission extends \yii\db\ActiveRecord
         return [
             [['Users', 'UserType'], 'required'],
             [['Users', 'UserType'], 'integer'],
-            [['Users', 'UserType'], 'unique', 'targetAttribute' => ['Users', 'UserType']],
+            [['Users', 'UserType','Branch'], 'unique', 'targetAttribute' => ['Users', 'UserType','Branch']],
         ];
     }
 

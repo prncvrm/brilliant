@@ -21,7 +21,7 @@ use app\models\Branch;
     <?php $form = ActiveForm::begin(); ?>
  <div class="row"><div class="col-md-3">
 <?php 
-if(Yii::$app->user->identity->UserType<=app\models\Users::ROLE_ADMIN){
+if(Yii::$app->user->identity->AccessLevel<=app\models\Users::ROLE_ADMIN){
 ?>
     <?= $form->field($model, 'EmployeeCode')->textInput(['maxlength' => true]) ?>
   </div>
@@ -63,18 +63,21 @@ else{
     <?= $form->field($model, 'MacAddress')->textInput(['maxlength' => true]) ?>
 </div></div>
 <div class="row">
+  <?php if(Yii::$app->user->identity->AccessLevel <= app\models\Users::ROLE_ADMIN){?>
   <div class="col-md-4">
     <?= $form->field($model, 'TimeSlot')->dropDownList(
       yii\helpers\ArrayHelper::map(app\models\TimeSlots::find()->all(),'id','InTime'),
       ['prompt'=>'Select In Time']
     ) ?>
   </div>
+  <?php }?>
   <div class="col-md-4">
     <?= $form->field($model, 'LeaveType')->dropDownList(
       yii\helpers\ArrayHelper::map(app\models\LeaveCategory::find(['<=','id',2])->all(),'id','Name'),
       ['prompt'=>'Select Paid Leave Type ']
     ) ?>
   </div>
+  
 </div>
 
     <div class="form-group">

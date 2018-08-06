@@ -12,7 +12,12 @@ use yii\filters\AccessControl;
 use app\models\UserTypeSearch;
 use app\models\UsersSearch;
 use app\models\Users;
-
+use app\models\Employee;
+use app\models\RoleAssignment;
+use app\models\BranchPermission;
+use app\models\Branch;
+use app\models\UserType;
+use yii\data\ArrayDataProvider;
 /**
  * UserTypePermissionController implements the CRUD actions for UserTypePermission model.
  */
@@ -82,11 +87,38 @@ class UserTypePermissionController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionAddAllApplicable($user_id){
+        $query=BranchPermission::find()->select(['branchpermission.Branch','roleassignment.UserType'])->leftJoin('roleassignment','roleassignment.users=branchpermission.Users')->where(['=','branchpermission.Users',$user_id])->asArray()->all();
+        print_r($query);
+         foreach($query as $q){
+            $model = new UserTypePermission();
+            $model->Users=$user_id;
+            $model->UserType=$q['UserType'];
+            $model->Branch=$q['Branch'];
+            if($model->validate()){
+                $model->save();
+                           }
+            
+        }
+        return $this->redirect(['view','user_id'=>$user_id]);
+    }
+    
+    public function actionView($user_id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $query=BranchPermission::find()->select(['branchpermission.Branch','roleassignment.UserType'])->leftJoin('roleassignment','roleassignment.users=branchpermission.Users')->where(['=','branchpermission.Users',$user_id])->asArray()->all();
+        $provider = new ArrayDataProvider([
+            'allModels'=>$query,
+            'pagination' => [ 'pageSize' => 20 ],
+         ]);
+         $models = $provider->getModels();
+
+        $searchModel = new UserTypePermissionSearch();
+        $dataProviderAllowed = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProviderAllowed->query->andWhere(['Users'=>$user_id]);
+
+
+        return $this->render('view',['dataProvider'=>$provider,'dataProviderAllowed'=>$dataProviderAllowed]);
+        
     }
 
     /**
@@ -144,12 +176,9 @@ class UserTypePermissionController extends Controller
      */
     public function actionDelete($id)
     {
-        $data=Yii::$app->request->post();
-        UserTypePermission::deleteAll(['Users'=>$data['Users'],'UserType'=>$data['UserType']]);
-        $response = Yii::$app->response;
-        $response->format = \yii\web\Response::FORMAT_JSON;
-        $response->data = ['success' =>true];
-        return $response;
+        $user_id=$this->findModel($id)->Users;
+        $this->findModel($id)->delete();
+        return $this->redirect(['view','user_id'=>$user_id]);
     }
 
     /**

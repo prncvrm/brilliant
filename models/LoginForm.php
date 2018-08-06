@@ -76,6 +76,8 @@ class LoginForm extends Model
     {
         if ($this->_user === false) {
             $this->_user = Users::findByUsername($this->username);
+            if($this->_user->LastLogin==null)
+                return $this->_user;
             $this->user->LastLogin= new \yii\db\Expression('NOW()');
             $this->user->save();
         }

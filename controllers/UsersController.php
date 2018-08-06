@@ -62,6 +62,15 @@ class UsersController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionChangePassword(){
+        $model = $this->findModel(Yii::$app->user->identity->id);
+        if($model->load(Yii::$app->request->post())){
+            $model->LastLogin=new \yii\db\Expression('NOW()');
+            $model->save();
+            return $this->redirect(['site/index']);
+        }
+        return $this->render('change-password',['model'=>$model]);
+    }
     /**
      * Switch Activiation
      * @return index
