@@ -35,9 +35,12 @@ if you run into problems loading dumps and cleaning databases.
 * populate: false - whether the the dump should be loaded before the test suite is started
 * cleanup: false - whether the dump should be reloaded before each test
 * reconnect: false - whether the module should reconnect to the database before each test
+* waitlock: 0 - wait lock (in seconds) that the database session should use for DDL statements
 * ssl_key - path to the SSL key (MySQL specific, @see http://php.net/manual/de/ref.pdo-mysql.php#pdo.constants.mysql-attr-key)
 * ssl_cert - path to the SSL certificate (MySQL specific, @see http://php.net/manual/de/ref.pdo-mysql.php#pdo.constants.mysql-attr-ssl-cert)
 * ssl_ca - path to the SSL certificate authority (MySQL specific, @see http://php.net/manual/de/ref.pdo-mysql.php#pdo.constants.mysql-attr-ssl-ca)
+* ssl_verify_server_cert - disables certificate CN verification (MySQL specific, @see http://php.net/manual/de/ref.pdo-mysql.php)
+* ssl_cipher - list of one or more permissible ciphers to use for SSL encryption (MySQL specific, @see http://php.net/manual/de/ref.pdo-mysql.php#pdo.constants.mysql-attr-cipher)
 
 ## Example
 
@@ -51,9 +54,12 @@ if you run into problems loading dumps and cleaning databases.
              populate: true
              cleanup: true
              reconnect: true
+             waitlock: 10
              ssl_key: '/path/to/client-key.pem'
              ssl_cert: '/path/to/client-cert.pem'
              ssl_ca: '/path/to/ca-cert.pem'
+             ssl_verify_server_cert: false
+             ssl_cipher: 'AES256-SHA'
 
 ## SQL data dump
 

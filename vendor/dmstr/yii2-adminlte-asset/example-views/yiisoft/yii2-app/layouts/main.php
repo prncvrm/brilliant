@@ -1,10 +1,8 @@
 <?php
 use yii\helpers\Html;
-use app\assets\PluginsAsset;
+
 /* @var $this \yii\web\View */
 /* @var $content string */
-
-PluginsAsset::register($this);
 
 
 if (Yii::$app->controller->action->id === 'login') { 
@@ -61,8 +59,6 @@ if (Yii::$app->controller->action->id === 'login') {
     </div>
 
     <?php $this->endBody() ?>
-
-</script>
     </body>
     </html>
     <?php $this->endPage() ?>
