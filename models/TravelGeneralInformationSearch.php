@@ -41,7 +41,10 @@ class TravelGeneralInformationSearch extends TravelGeneralInformation
      */
     public function search($params)
     {
-        $query = TravelGeneralInformation::find();
+        $search_query=UserTypePermission::find()->select('Branch','UserType')->where(['=','Users',Yii::$app->User->identity->id]);
+        $emp_query = Employee::find()->select(['employee.id'])->leftJoin('usertypepermission','employee.Branch=usertypepermission.Branch and employee.Designation=usertypepermission.UserType')->where(['=','usertypepermission.Users',Yii::$app->user->identity->id]);
+        //print_r($emp_query->all());
+        $query = TravelGeneralInformation::find()->where(['in','EmployeeId',$emp_query]);
 
         // add conditions that should always apply here
 

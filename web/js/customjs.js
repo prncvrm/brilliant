@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$('.date').datepicker();
+	$('.date').datepicker({format:'yyyy-mm-dd'});
 	$('.datatable').DataTable();
 	load_roleDetails();
 	load_branchDetails();

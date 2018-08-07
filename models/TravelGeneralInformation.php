@@ -49,6 +49,9 @@ class TravelGeneralInformation extends \yii\db\ActiveRecord
             'Location' => 'Location',
             'From' => 'From',
             'To' => 'To',
+            'employee.EmployeeCode' =>'Employee Code',
         ];
     }
+   
+        
 }

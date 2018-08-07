@@ -66,13 +66,34 @@ class TravelGeneralInformationController extends Controller
     {
         $model = new TravelGeneralInformation();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            $model->EmployeeId = Yii::$app->user->identity->Employee;
+            $model->Approve= 0;
+            $model->Resolved=0;
+            $model->save();
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    public function actionApprove($id){
+        $model=$this->findModel($id);
+        $model->Approve=1;
+        $model->Resolved=1;
+        if($_model->save())    
+            return $this->redirect(['index']);
+        throw new NotFoundHttpException('Some Issue, Fixing it.');
+    }
+    public function actionDisapprove($id){
+        $model=$this->findModel($id);
+        $model->Approve=1;
+        $model->Resolved=1;
+        if($_model->save())    
+            return $this->redirect(['index']);
+        throw new NotFoundHttpException('Some Issue, Fixing it.');
     }
 
     /**
