@@ -9,6 +9,7 @@ use yii\helpers\Url;
 $this->title="Roles Permitted";
 ?>
 <div class="user-type-permission-view">
+   
     <div class="row">
     
     <div class="col-md-6">

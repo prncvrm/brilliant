@@ -12,13 +12,13 @@ use yii\helpers\ArrayHelper;
 <div class="user-type-permission-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'action' => ['view'],
         'method' => 'get',
     ]); ?>
 
     <?= $form->field($model, 'UserName')->dropDownList(
-    ArrayHelper::map(Users::find()->all(),'UserName','UserName'),
-    ['prompt'=>'Select Name']
+    ArrayHelper::map(Users::find()->all(),'id','UserName'),
+    ['prompt'=>'Select Name','name'=>'user_id']
     ) ?>
 
     
