@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\TravelGeneralInformation;
-use app\models\TravelGeneralInformationSearch;
+use app\models\FareExpense;
+use app\models\FareExpenseSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * TravelGeneralInformationController implements the CRUD actions for TravelGeneralInformation model.
+ * FareExpenseController implements the CRUD actions for FareExpense model.
  */
-class TravelGeneralInformationController extends Controller
+class FareExpenseController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,23 +30,36 @@ class TravelGeneralInformationController extends Controller
     }
 
     /**
-     * Lists all TravelGeneralInformation models.
+     * Lists all FareExpense models.
      * @return mixed
      */
-    public function actionIndex($Approved)
+    public function actionIndex($TGI_id)
     {
-        $searchModel = new TravelGeneralInformationSearch();
+        $GeneralInModel = \app\models\TravelGeneralInformation::findOne(['id'=>$TGI_id]);
+        if($GeneralInModel->EmployeeId != Yii::$app->user->identity->id)
+            throw new NotFoundHttpException('Not Permitted!.');
+        $model = new FareExpense();
+        $searchModel = new FareExpenseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        if($Approved==1)
-            $dataProvider->query->andWhere(['Approve'=>1]);
+        $dataProvider->query->andWhere(['TGIid'=>$TGI_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->TGIid=$TGI_id;
+            $model->save();
+            return $this->redirect(['index','TGI_id'=>$TGI_id]);
+        }
+
+        
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model'=>$model,
+            'GeneralInModel'=>$GeneralInModel,
         ]);
     }
 
     /**
-     * Displays a single TravelGeneralInformation model.
+     * Displays a single FareExpense model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -59,20 +72,16 @@ class TravelGeneralInformationController extends Controller
     }
 
     /**
-     * Creates a new TravelGeneralInformation model.
+     * Creates a new FareExpense model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new TravelGeneralInformation();
+        $model = new FareExpense();
 
-        if ($model->load(Yii::$app->request->post()) ) {
-            $model->EmployeeId = Yii::$app->user->identity->Employee;
-            $model->Approve= 0;
-            $model->Resolved=0;
-            $model->save();
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -80,26 +89,8 @@ class TravelGeneralInformationController extends Controller
         ]);
     }
 
-    public function actionApprove($id){
-        $model=$this->findModel($id);
-        $model->Approve=1;
-        $model->Resolved=1;
-        if($model->save())    
-            return $this->redirect(['index']);
-        throw new NotFoundHttpException('Some Issue, Fixing it.');
-    }
-    public function actionDisapprove($id){
-        $model=$this->findModel($id);
-        $model->PurposeOfTour=$model->PurposeOfTour." (Rejected)";
-        $model->Approve=0;
-        $model->Resolved=1;
-        if($model->save())    
-            return $this->redirect(['index']);
-        throw new NotFoundHttpException('Some Issue, Fixing it.');
-    }
-
     /**
-     * Updates an existing TravelGeneralInformation model.
+     * Updates an existing FareExpense model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -119,7 +110,7 @@ class TravelGeneralInformationController extends Controller
     }
 
     /**
-     * Deletes an existing TravelGeneralInformation model.
+     * Deletes an existing FareExpense model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -133,15 +124,15 @@ class TravelGeneralInformationController extends Controller
     }
 
     /**
-     * Finds the TravelGeneralInformation model based on its primary key value.
+     * Finds the FareExpense model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return TravelGeneralInformation the loaded model
+     * @return FareExpense the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = TravelGeneralInformation::findOne($id)) !== null) {
+        if (($model = FareExpense::findOne($id)) !== null) {
             return $model;
         }
 
