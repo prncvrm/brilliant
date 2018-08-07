@@ -122,13 +122,6 @@ class RestTest extends Unit
         $this->module->seeResponseEquals('<xml><name>John</name></xml>');
     }
 
-    public function testXmlResponseEquals()
-    {
-        $this->setStubResponse('<xml></xml>');
-        $this->module->seeResponseIsXml();
-        $this->module->seeXmlResponseEquals('<xml></xml>');
-    }
-
     public function testInvalidXml()
     {
         $this->setExpectedException('PHPUnit\Framework\ExpectationFailedException');

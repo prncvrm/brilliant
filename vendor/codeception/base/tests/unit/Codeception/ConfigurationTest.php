@@ -65,8 +65,5 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
 
         $commandsConfig = $defaultConfig['extensions'];
         $this->assertArrayHasKey('commands', $commandsConfig);
-
-        $this->assertArrayHasKey('extends', $defaultConfig);
-        $this->assertNull($defaultConfig['extends']);
     }
 }

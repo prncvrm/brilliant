@@ -34,7 +34,7 @@ class Descriptor
     {
         $example = null;
 
-        if (method_exists($testCase, 'getMetaData')
+        if (is_callable([$testCase, 'getMetadata'])
             && $example = $testCase->getMetadata()->getCurrent('example')
         ) {
             $example = ':' . substr(sha1(json_encode($example)), 0, 7);

@@ -3,10 +3,6 @@ namespace Codeception\Lib\Driver;
 
 class Oci extends Db
 {
-    public function setWaitLock($seconds)
-    {
-        $this->dbh->exec('ALTER SESSION SET ddl_lock_timeout = ' . (int) $seconds);
-    }
 
     public function cleanup()
     {

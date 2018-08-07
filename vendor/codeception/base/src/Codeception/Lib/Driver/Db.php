@@ -101,14 +101,6 @@ class Db
         $this->options = $options;
     }
 
-    public function __destruct()
-    {
-        if ($this->dbh->inTransaction()) {
-            $this->dbh->rollBack();
-        }
-        $this->dbh = null;
-    }
-
     public function getDbh()
     {
         return $this->dbh;
@@ -126,15 +118,6 @@ class Db
     }
 
     public function cleanup()
-    {
-    }
-
-    /**
-     * Set the lock waiting interval for the database session
-     * @param int $seconds
-     * @return void
-     */
-    public function setWaitLock($seconds)
     {
     }
 
@@ -241,7 +224,7 @@ class Db
 
         return 'WHERE ' . implode('AND ', $params);
     }
-
+    
     /**
      * @deprecated use deleteQueryByCriteria instead
      */

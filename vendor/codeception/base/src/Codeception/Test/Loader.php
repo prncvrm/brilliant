@@ -53,11 +53,6 @@ class Loader
             new UnitLoader(),
             new GherkinLoader($suiteSettings)
         ];
-        if (isset($suiteSettings['formats'])) {
-            foreach ($suiteSettings['formats'] as $format) {
-                $this->formats[] = new $format($suiteSettings);
-            }
-        }
     }
 
     public function getTests()

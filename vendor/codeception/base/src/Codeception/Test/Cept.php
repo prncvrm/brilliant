@@ -77,7 +77,7 @@ class Cept extends Test implements Interfaces\Plain, Interfaces\ScenarioDriven, 
         return $this->parser;
     }
 
-    public function fetchDependencies()
+    public function getDependencies()
     {
         return $this->getMetadata()->getDependencies();
     }
