@@ -21,7 +21,11 @@ use yii\bootstrap\Tabs;
                 ],[
                     'label'=>'Other Expense',
                     'active'=>($active==4)?true:false,
-                    'url'=>Url::to(['other-expense/index','TGI_id'=>5]),
+                    'url'=>Url::to(['other-expense/index','TGI_id'=>$TGI_id]),
+                ],[
+                    'label'=>'Document Upload',
+                    'active'=>($active==5)?true:false,
+                    'url'=>Url::to(['document-uploads/index','TGI_id'=>$TGI_id]),
                 ],
                 ],
               ]);

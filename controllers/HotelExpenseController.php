@@ -36,7 +36,7 @@ class HotelExpenseController extends Controller
     public function actionIndex($TGI_id)
     {
         $GeneralInModel = \app\models\TravelGeneralInformation::findOne(['id'=>$TGI_id]);
-        if($GeneralInModel->EmployeeId != Yii::$app->user->identity->id)
+        if($GeneralInModel->EmployeeId != Yii::$app->user->identity->Employee || $GeneralInModel->Completed ==1)
             throw new NotFoundHttpException('Not Permitted!.');
         $model = new HotelExpense();
         $searchModel = new HotelExpenseSearch();

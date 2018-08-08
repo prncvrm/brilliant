@@ -36,11 +36,12 @@ class ConveyanceExpenseController extends Controller
     public function actionIndex($TGI_id)
     {
          $GeneralInModel = \app\models\TravelGeneralInformation::findOne(['id'=>$TGI_id]);
-        if($GeneralInModel->EmployeeId != Yii::$app->user->identity->id)
+        if($GeneralInModel->EmployeeId != Yii::$app->user->identity->Employee || $GeneralInModel->Completed ==1)
             throw new NotFoundHttpException('Not Permitted!.');
         $model = new ConveyanceExpense();
         $searchModel = new ConveyanceExpenseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['TGIid'=>$TGI_id]);
         if ($model->load(Yii::$app->request->post())) {
             $model->TGIid=$TGI_id;
             $model->save();

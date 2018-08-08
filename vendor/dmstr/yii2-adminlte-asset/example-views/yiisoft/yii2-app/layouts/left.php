@@ -85,7 +85,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Employee Attendance', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
-                            ['label' => 'Change Request', 'icon' => 'circle-o', 'url' => ['/change-request/index'],],
+                            ['label' => 'Approve Request', 'icon' => 'circle-o', 'url' => ['/change-request/index'],],
                             ['label' => 'Leave Request', 'icon' => 'circle-o', 'url' => ['/leave-request/index'],],
                         ],
                     ],
@@ -109,15 +109,16 @@
                             
                             ['label' => 'Employee Attendance', 'icon' => 'circle-o', 'url' => ['/employee/index'],],
                             ['label' => 'Month Off', 'icon' => 'circle-o', 'url' => ['/month-off/index'],],
-                            ['label' => 'Change Request', 'icon' => 'circle-o', 'url' => ['/change-request/reverse-index'],],
+                            ['label' => 'Approve Request', 'icon' => 'circle-o', 'url' => ['/change-request/reverse-index'],],
                             ['label' => 'Leave Request', 'icon' => 'circle-o', 'url' => ['/leave-request/index'],],
                             ['label' => 'Employee Criteria', 'icon' => 'circle-o', 'url' => ['/attendance-criteria/index'],],
                             
                         ],
                     ],
+                    ['label' => 'Tour Management', 'options' => ['class' => 'header']],
                     [
                         'label' => 'Travel Desk',
-                        'visible'=>Yii::$app->user->identity->AccessLevel<=app\models\Users::ROLE_ADMIN,
+                        'visible'=>Yii::$app->user->identity->AccessLevel==app\models\Users::ROLE_MODERATOR,
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
@@ -126,6 +127,19 @@
                             ['label' => 'All Tickets', 'icon' => 'circle-o', 'url' => ['/travel-general-information/index?Approved=0'],],
                              ['label' => 'Create Tickets', 'icon' => 'circle-o', 'url' => ['/travel-general-information/create'],],
                              ['label' => 'Approved Tickets', 'icon' => 'circle-o', 'url' => ['/travel-general-information/index?Approved=1'],],
+                         ],
+                            
+                        ],
+                        [
+                        'label' => 'Travel Desk',
+                        'visible'=>Yii::$app->user->identity->AccessLevel==app\models\Users::ROLE_ADMIN,
+                        'icon' => 'share',
+                        'url' => '#',
+                        'items' => [
+                            
+                            
+                            ['label' => 'Approve Tour', 'icon' => 'circle-o', 'url' => ['/travel-general-information/index?Approved=0'],],
+                             ['label' => 'Tour Report', 'icon' => 'circle-o', 'url' => ['/travel-general-information/create'],],
                          ],
                             
                         ],

@@ -30,7 +30,7 @@ class TravelGeneralInformation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['EmployeeId', 'PurposeOfTour', 'Location', 'From', 'To'], 'required'],
+            [['EmployeeId', 'PurposeOfTour', 'Location', 'From', 'To','CurrLocation'], 'required'],
             [['EmployeeId', 'Location'], 'integer'],
             [['From', 'To'], 'safe'],
             [['PurposeOfTour'], 'string', 'max' => 255],
@@ -46,9 +46,10 @@ class TravelGeneralInformation extends \yii\db\ActiveRecord
             'id' => 'ID',
             'EmployeeId' => 'Employee ID',
             'PurposeOfTour' => 'Purpose Of Tour',
-            'Location' => 'Location',
+            'Location' => 'Visit Location',
             'From' => 'From',
             'To' => 'To',
+            'CurrLocation'=>'Current Location',
             'employee.EmployeeCode' =>'Employee Code',
         ];
     }

@@ -39,10 +39,20 @@ class TravelGeneralInformationController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         if($Approved==1)
             $dataProvider->query->andWhere(['Approve'=>1]);
+        if(Yii::$app->user->identity->AccessLevel==\app\models\Users::ROLE_MODERATOR)
+            $dataProvider->query->andWhere(['EmployeeId'=>Yii::$app->user->identity->Employee]);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionFinalSubmit($id){
+        $model=$this->findModel($id);
+        $model->Completed=1;
+        $model->save();
+        return $this->redirect(['index','Approved'=>1]);
+
     }
 
     /**
@@ -72,7 +82,7 @@ class TravelGeneralInformationController extends Controller
             $model->Approve= 0;
             $model->Resolved=0;
             $model->save();
-            return $this->redirect(['index']);
+            return $this->redirect(['index','Approved'=>0]);
         }
 
         return $this->render('create', [
@@ -85,7 +95,7 @@ class TravelGeneralInformationController extends Controller
         $model->Approve=1;
         $model->Resolved=1;
         if($model->save())    
-            return $this->redirect(['index']);
+            return $this->redirect(['index','Approved'=>0]);
         throw new NotFoundHttpException('Some Issue, Fixing it.');
     }
     public function actionDisapprove($id){
@@ -94,7 +104,7 @@ class TravelGeneralInformationController extends Controller
         $model->Approve=0;
         $model->Resolved=1;
         if($model->save())    
-            return $this->redirect(['index']);
+            return $this->redirect(['index','Approved'=>0]);
         throw new NotFoundHttpException('Some Issue, Fixing it.');
     }
 

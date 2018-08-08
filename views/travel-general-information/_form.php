@@ -23,7 +23,12 @@ use yii\widgets\ActiveForm;
                         <div class="col-md-6">
                             <?= $form->field($model, 'PurposeOfTour')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
+                            <?= $form->field($model, 'CurrLocation')->dropDownList(
+                            yii\helpers\ArrayHelper::map(\app\models\Branch::find()->all(),'id','value'),
+                            ['prompt'=>'Select Location']) ?>
+                        </div>
+                        <div class="col-md-3">
                             <?= $form->field($model, 'Location')->dropDownList(
                             yii\helpers\ArrayHelper::map(\app\models\Branch::find()->all(),'id','value'),
                             ['prompt'=>'Select Location']) ?>

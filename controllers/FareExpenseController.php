@@ -36,8 +36,9 @@ class FareExpenseController extends Controller
     public function actionIndex($TGI_id)
     {
         $GeneralInModel = \app\models\TravelGeneralInformation::findOne(['id'=>$TGI_id]);
-        if($GeneralInModel->EmployeeId != Yii::$app->user->identity->id)
+        if($GeneralInModel->EmployeeId != Yii::$app->user->identity->Employee){
             throw new NotFoundHttpException('Not Permitted!.');
+        }
         $model = new FareExpense();
         $searchModel = new FareExpenseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -47,8 +48,6 @@ class FareExpenseController extends Controller
             $model->save();
             return $this->redirect(['index','TGI_id'=>$TGI_id]);
         }
-
-        
 
         return $this->render('index', [
             'searchModel' => $searchModel,
