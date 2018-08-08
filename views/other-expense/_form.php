@@ -2,38 +2,30 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\TravelMode;
 
-use yii\helpers\Url;
 /* @var $this yii\web\View */
-/* @var $model app\models\FareExpense */
+/* @var $model app\models\OtherExpense */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
 <div class="col-md-10">
           <div class="nav-tabs-custom">
-            <?=$this->render('../site/_tabs',['active'=>1,'TGI_id'=>$TGI_id])?>
+            <?=$this->render('../site/_tabs',['active'=>4,'TGI_id'=>$TGI_id])?>
             <div class="tab-content">
               <div class="active tab-pane" id="activity">
-				<div class="fare-expense-form">
-
+				<div class="other-expense-form">
+					<div class="row">
     <?php $form = ActiveForm::begin(); ?>
-    
-<div class="row">
-<div class="col-md-6">
-	 
-    <?= $form->field($model, 'ModeOfTravel')->dropDownList(
-    	yii\helpers\ArrayHelper::map(\app\models\TravelMode::find()->all(),'id','value'),
-           ['prompt'=>'Select Mode']
-    ) ?>
-</div>
+						<div class="col-md-12">
+
+    <?= $form->field($model, 'Particulars')->textInput(['maxlength' => true]) ?>
+    </div>
 </div>
 <div class="row">
 	<div class="col-md-6">
-
-    <?= $form->field($model, 'TicketNo')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'Date')->textInput(['class'=>'form-control date']) ?>
 </div>
 <div class="col-md-6">
+
     <?= $form->field($model, 'Amount')->textInput() ?>
 </div>
 </div>

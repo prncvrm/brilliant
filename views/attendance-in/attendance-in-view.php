@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Employee;
+use app\models\Branch;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EmployeeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -187,6 +188,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="col-md-3" style="font-size:18px;">
     <p><b>Emp Code :</b> <?=Employee::findOne(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->EmployeeCode?></p>
     <p><b>Name :</b> <?=Employee::findOne(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->EmployeeName?></p>
+    <p><b>Branch :</b> <?=Branch::findOne(['id'=>Employee::findOne(['id'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]])->Branch])->value;?></p>
     <?php
     if(Yii::$app->request->queryParams['AttendanceInSearch']["Month"]==date('m')){ 
     $leaveHisModel=app\models\LeaveHistory::findOne(['EmployeeId'=>Yii::$app->request->queryParams['AttendanceInSearch']["EmployeeId"]]);

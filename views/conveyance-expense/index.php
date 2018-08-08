@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 </div>
 <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model, 'TGI_id'=>$GeneralInModel->id,
     ])?>
 
     <?= GridView::widget([
@@ -37,10 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'Date',
             'FromPlace',
             'ToPlace',
-            'Mode',
+            ['attribute'=>'Mode',
+            'value'=>function($model){
+                return \app\models\TravelMode::findOne(['id'=>$model->Mode])->value;
+            }
+            ],
             'Amount',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+        'template'=>'{delete}'],
         ],
     ]); ?>
 </div>

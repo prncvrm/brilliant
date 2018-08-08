@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\FareExpenseSearch */
+/* @var $searchModel app\models\OtherExpenseSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Fare Expense';
+$this->title = 'Other Expense';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-md-2">
@@ -28,24 +28,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,'TGI_id'=>$GeneralInModel->id,
     ])?>
 
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-       // / 'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            ['attribute'=>'ModeOfTravel',
-            'value'=>function($model){
-                return \app\models\TravelMode::findOne(['id'=>$model->ModeOfTravel])->value;
-            }
-            ],
             
-            'TicketNo',
+            'Date',
+            'Particulars',
             'Amount',
 
             ['class' => 'yii\grid\ActionColumn',
             'template'=>'{delete}'],
         ],
     ]); ?>
-</div>

@@ -34,7 +34,7 @@ $branch_query=Branch::find()->select(['branch.id'])->leftJoin('branchpermission'
           ?>
     <?= $form->field($model, 'EmployeeId')->dropDownList(
         
-        ArrayHelper::map($query,'id','EmployeeName'),
+        ArrayHelper::map($query,'id','EmployeeName',function($model){return Branch::findOne(['id'=>$model->Branch])->value;}),
         ['prompt'=>'Select Employee Name']
     ) ?>
      </div>    

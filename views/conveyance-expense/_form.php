@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="col-md-10">
           <div class="nav-tabs-custom">
-            <?=$this->render('../site/_tabs',['active'=>2])?>
+            <?=$this->render('../site/_tabs',['active'=>2,'TGI_id'=>$TGI_id])?>
             <div class="tab-content">
               <div class="active tab-pane" id="activity">
 <div class="conveyance-expense-form">
