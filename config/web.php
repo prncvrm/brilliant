@@ -4,6 +4,11 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
+    'modules' => [
+   'gridview' =>  [
+        'class' => '\kartik\grid\Module'
+    ]
+],
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -60,6 +65,7 @@ $config = [
         ],
         
     ],
+    
     'params' => $params,
 ];
 

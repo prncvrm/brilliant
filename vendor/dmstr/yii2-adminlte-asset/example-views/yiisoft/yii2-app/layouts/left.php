@@ -115,6 +115,21 @@
                             
                         ],
                     ],
+                    [
+                        'label' => 'Travel Desk',
+                        'visible'=>Yii::$app->user->identity->AccessLevel<=app\models\Users::ROLE_ADMIN,
+                        'icon' => 'share',
+                        'url' => '#',
+                        'items' => [
+                            
+                            
+                            ['label' => 'All Tickets', 'icon' => 'circle-o', 'url' => ['/travel-general-information/index?Approved=0'],],
+                             ['label' => 'Create Tickets', 'icon' => 'circle-o', 'url' => ['/travel-general-information/create'],],
+                             ['label' => 'Approved Tickets', 'icon' => 'circle-o', 'url' => ['/travel-general-information/index?Approved=1'],],
+                         ],
+                            
+                        ],
+                    
                     /*['label' => 'Leave Management', 'options' => ['class' => 'header']],
                     [
                         'label' => 'Leave Master',

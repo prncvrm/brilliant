@@ -89,7 +89,6 @@ class UserTypePermissionController extends Controller
      */
     public function actionAddAllApplicable($user_id){
         $query=BranchPermission::find()->select(['branchpermission.Branch','roleassignment.UserType'])->leftJoin('roleassignment','roleassignment.users=branchpermission.Users')->where(['=','branchpermission.Users',$user_id])->asArray()->all();
-        print_r($query);
          foreach($query as $q){
             $model = new UserTypePermission();
             $model->Users=$user_id;
