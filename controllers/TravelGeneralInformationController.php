@@ -8,7 +8,10 @@ use app\models\TravelGeneralInformationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use app\models\ConveyanceExpenseSearch;
+use app\models\OtherExpenseSearch;
+use app\models\FareExpenseSearch;
+use app\models\HotelExpenseSearch;
 /**
  * TravelGeneralInformationController implements the CRUD actions for TravelGeneralInformation model.
  */
@@ -33,6 +36,34 @@ class TravelGeneralInformationController extends Controller
      * Lists all TravelGeneralInformation models.
      * @return mixed
      */
+    public function actionReport()
+    {
+        $searchModel = new TravelGeneralInformationSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['Approve'=>1]);
+        $dataProvider->query->andWhere(['Completed'=>1]);
+        return $this->render('report', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    //Generate PartialRendered Report to print too!
+    public function actionGeneratereport($id){
+        $model=$this->findModel($id);
+        if($model==null)
+            throw new NotFoundHttpException('No Such Report Found.');
+        $ConveyanceExpenseDataProvider = (new ConveyanceExpenseSearch())->search(Yii::$app->request->queryParams);
+        $ConveyanceExpenseDataProvider->query->andWhere(['TGIid'=>$id]);
+        $FareExpenseDataProvider = (new FareExpenseSearch())->search(Yii::$app->request->queryParams);
+        $FareExpenseDataProvider->query->andWhere(['TGIid'=>$id]);
+        $HotelExpenseDataProvider = (new HotelExpenseSearch())->search(Yii::$app->request->queryParams);
+        $HotelExpenseDataProvider->query->andWhere(['TGIid'=>$id]);
+        $OtherExpenseDataProvider = (new OtherExpenseSearch())->search(Yii::$app->request->queryParams);
+        $OtherExpenseDataProvider->query->andWhere(['TGIid'=>$id]);
+        return $this->renderPartial('generatereport',['model'=>$model,'ConveyanceExpenseDataProvider'=>$ConveyanceExpenseDataProvider,'OtherExpenseDataProvider'=>$OtherExpenseDataProvider,'FareExpenseDataProvider'=>$FareExpenseDataProvider,'HotelExpenseDataProvider'=>$HotelExpenseDataProvider]);
+    }
+
+
     public function actionIndex($Approved)
     {
         $searchModel = new TravelGeneralInformationSearch();

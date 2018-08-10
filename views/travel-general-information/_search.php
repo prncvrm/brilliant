@@ -11,11 +11,9 @@ use yii\widgets\ActiveForm;
 <div class="travel-general-information-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'action' => ['report'],
         'method' => 'get',
     ]); ?>
-
-    <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'EmployeeId') ?>
 
