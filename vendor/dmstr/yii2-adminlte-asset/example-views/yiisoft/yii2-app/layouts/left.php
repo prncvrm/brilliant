@@ -139,7 +139,7 @@
                             
                             
                             ['label' => 'Approve Tour', 'icon' => 'circle-o', 'url' => ['/travel-general-information/index?Approved=0'],],
-                             ['label' => 'Tour Report', 'icon' => 'circle-o', 'url' => ['/travel-general-information/create'],],
+                             ['label' => 'Tour Report', 'icon' => 'circle-o', 'url' => ['/travel-general-information/report'],],
                          ],
                             
                         ],

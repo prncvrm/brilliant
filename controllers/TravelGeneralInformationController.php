@@ -12,6 +12,8 @@ use app\models\ConveyanceExpenseSearch;
 use app\models\OtherExpenseSearch;
 use app\models\FareExpenseSearch;
 use app\models\HotelExpenseSearch;
+use app\models\DocumentUploads;
+use app\models\TravelFinal;
 /**
  * TravelGeneralInformationController implements the CRUD actions for TravelGeneralInformation model.
  */
@@ -50,17 +52,21 @@ class TravelGeneralInformationController extends Controller
     //Generate PartialRendered Report to print too!
     public function actionGeneratereport($id){
         $model=$this->findModel($id);
+        if(!TravelFinal::findOne(['TGIid'=>$id]))
+            return $this->redirect(['travel-final/create','id'=>$id]);
         if($model==null)
             throw new NotFoundHttpException('No Such Report Found.');
         $ConveyanceExpenseDataProvider = (new ConveyanceExpenseSearch())->search(Yii::$app->request->queryParams);
         $ConveyanceExpenseDataProvider->query->andWhere(['TGIid'=>$id]);
+        $ConveyanceExpenseDataProvider->sort->sortParam = false;
         $FareExpenseDataProvider = (new FareExpenseSearch())->search(Yii::$app->request->queryParams);
         $FareExpenseDataProvider->query->andWhere(['TGIid'=>$id]);
         $HotelExpenseDataProvider = (new HotelExpenseSearch())->search(Yii::$app->request->queryParams);
         $HotelExpenseDataProvider->query->andWhere(['TGIid'=>$id]);
         $OtherExpenseDataProvider = (new OtherExpenseSearch())->search(Yii::$app->request->queryParams);
         $OtherExpenseDataProvider->query->andWhere(['TGIid'=>$id]);
-        return $this->renderPartial('generatereport',['model'=>$model,'ConveyanceExpenseDataProvider'=>$ConveyanceExpenseDataProvider,'OtherExpenseDataProvider'=>$OtherExpenseDataProvider,'FareExpenseDataProvider'=>$FareExpenseDataProvider,'HotelExpenseDataProvider'=>$HotelExpenseDataProvider]);
+        $DocumentUploads=DocumentUploads::find()->where(['TGIid'=>$id])->all();
+        return $this->renderPartial('generatereport',['model'=>$model,'ConveyanceExpenseDataProvider'=>$ConveyanceExpenseDataProvider,'OtherExpenseDataProvider'=>$OtherExpenseDataProvider,'FareExpenseDataProvider'=>$FareExpenseDataProvider,'HotelExpenseDataProvider'=>$HotelExpenseDataProvider,'DocumentUploads'=>$DocumentUploads]);
     }
 
 

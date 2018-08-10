@@ -36,6 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
             }],
             'From',
             'To',
+            ['attribute'=>'Grand Total',
+            'value'=>function($model){ 
+                return app\models\FareExpense::getTotal($model)+app\models\ConveyanceExpense::getTotal($model)+app\models\HotelExpense::getTotal($model)+app\models\OtherExpense::getTotal($model);
+            },
+            ],
             ['attribute'=>'Completed',
             'value'=>function($model){
                 switch($model->Completed){

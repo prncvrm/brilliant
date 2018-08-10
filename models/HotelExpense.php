@@ -54,4 +54,11 @@ class HotelExpense extends \yii\db\ActiveRecord
             'FoodAmount' => 'Food Amount',
         ];
     }
+    public static function getTotal($provider)
+    {
+        $query = (new \yii\db\Query())->from('HotelExpense');
+        $sum=$query->where(['TGIid'=>$provider->id])->sum('StayAmount');
+        $sum+=$query->where(['TGIid'=>$provider->id])->sum('FoodAmount');
+        return $sum;
+    }
 }

@@ -54,4 +54,10 @@ class ConveyanceExpense extends \yii\db\ActiveRecord
             'Amount' => 'Amount',
         ];
     }
+    public static function getTotal($provider)
+    {
+        $query = (new \yii\db\Query())->from('ConveyanceExpense');
+        $sum = $query->where(['TGIid'=>$provider->id])->sum('Amount');
+        return $sum;
+    }
 }
