@@ -38,6 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
             }],
             'From',
             'To',
+            ['attribute'=>'Processed?',
+            'value'=>function($model){
+                switch($model->Approve){
+                    case 0 :
+                        return "No";
+                    case 1:
+                        return "Yes";
+                }
+            }],
             ['attribute'=>'Completed',
             'value'=>function($model){
                 switch($model->Completed){
@@ -47,7 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         return "Complete";
                 }
             }],
-
             ['class' => 'yii\grid\ActionColumn',
             'template'=>'{approve} {disapprove}',
             'visible'=>Yii::$app->user->identity->AccessLevel==\app\models\Users::ROLE_ADMIN,
