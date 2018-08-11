@@ -50,10 +50,12 @@ class TravelGeneralInformationController extends Controller
         ]);
     }
     //Generate PartialRendered Report to print too!
-    public function actionGeneratereport($id){
+    public function actionGeneratereport($id,$preview){
         $model=$this->findModel($id);
-        if(!TravelFinal::findOne(['TGIid'=>$id]))
-            return $this->redirect(['travel-final/create','id'=>$id]);
+        if($preview==0){
+            if(!TravelFinal::findOne(['TGIid'=>$id]))
+                return $this->redirect(['travel-final/create','id'=>$id]);
+        }
         if($model==null)
             throw new NotFoundHttpException('No Such Report Found.');
         $ConveyanceExpenseDataProvider = (new ConveyanceExpenseSearch())->search(Yii::$app->request->queryParams);
@@ -66,7 +68,7 @@ class TravelGeneralInformationController extends Controller
         $OtherExpenseDataProvider = (new OtherExpenseSearch())->search(Yii::$app->request->queryParams);
         $OtherExpenseDataProvider->query->andWhere(['TGIid'=>$id]);
         $DocumentUploads=DocumentUploads::find()->where(['TGIid'=>$id])->all();
-        return $this->renderPartial('generatereport',['model'=>$model,'ConveyanceExpenseDataProvider'=>$ConveyanceExpenseDataProvider,'OtherExpenseDataProvider'=>$OtherExpenseDataProvider,'FareExpenseDataProvider'=>$FareExpenseDataProvider,'HotelExpenseDataProvider'=>$HotelExpenseDataProvider,'DocumentUploads'=>$DocumentUploads]);
+        return $this->renderPartial('generatereport',['model'=>$model,'ConveyanceExpenseDataProvider'=>$ConveyanceExpenseDataProvider,'OtherExpenseDataProvider'=>$OtherExpenseDataProvider,'FareExpenseDataProvider'=>$FareExpenseDataProvider,'HotelExpenseDataProvider'=>$HotelExpenseDataProvider,'DocumentUploads'=>$DocumentUploads,'preview'=>$preview]);
     }
 
 

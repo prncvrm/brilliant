@@ -182,6 +182,7 @@ white-space: nowrap;
     </div>
   </div>
 </div>
+<?php if(!$preview){?>
 <div class="col-md-4 col-xs-4 col-sm-4">
   <div class="form-group">
     <label class="control-label col-sm-5 col-xs-5 col-sm-5" >Advance Taken:</label>
@@ -198,6 +199,7 @@ white-space: nowrap;
     </div>
   </div>
 </div>
+<?php }?>
 </div>
 <?php foreach($DocumentUploads as $du){
 	echo("<img src='".$du['Image']."' style='width:100%'>");

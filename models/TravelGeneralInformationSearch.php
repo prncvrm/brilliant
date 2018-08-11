@@ -62,10 +62,10 @@ class TravelGeneralInformationSearch extends TravelGeneralInformation
             'id' => $this->id,
             'EmployeeId' => $this->EmployeeId,
             'Location' => $this->Location,
-            'From' => $this->From,
-            'To' => $this->To,
+            
         ]);
-
+        $query->andFilterWhere(['>=','From',$this->From]);
+        $query->andFilterWhere(['<=','To',$this->To]);
         $query->andFilterWhere(['like', 'PurposeOfTour', $this->PurposeOfTour]);
 
         return $dataProvider;
