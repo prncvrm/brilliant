@@ -38,13 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
             }],
             'From',
             'To',
-            ['attribute'=>'Approve',
+            ['attribute'=>'Processed?',
             'value'=>function($model){
                 switch($model->Approve){
                     case 0 :
-                        return "Rejected";
+                        return "No";
                     case 1:
-                        return "Approved";
+                        return "Yes";
                 }
             }],
             ['attribute'=>'Completed',
